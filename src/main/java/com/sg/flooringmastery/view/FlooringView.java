@@ -63,6 +63,16 @@ public class FlooringView {
     }
 
     /**
+     * Displays multiple orders given a set.
+     * @param orders the set of orders.
+     */
+    public void displayOrders(Set<Order> orders) {
+        for (Order order : orders) {
+            displayOrder(order);
+        }
+    }
+
+    /**
      * Displays a note letting the user know their order was placed successfully.
      * @param customerName the customer's name
      */

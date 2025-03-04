@@ -70,6 +70,7 @@ public class FlooringController {
         LocalDate date = view.askForDate();
         // get orders from orders from service
         view.displayOrders(orders);
+        // TODO: STOPPED HERE
     }
 
     /**
