@@ -55,7 +55,7 @@ public class FlooringView {
         // tax $%.2f
         // total cost $%.2f
 
-        io.print("%s - %s %s : %s - %.0f sq ft\n $%.2f + $%.2f (+ $%.2f) = $%.2f\n",
+        io.printF("%s - %s %s : %s - %.0f sq ft\n $%.2f + $%.2f (+ $%.2f) = $%.2f\n",
                 orderNumber, displayMe.getCustomerName(), displayMe.getTaxObject().getStateName(),
                 displayMe.getProduct().getProductType(), displayMe.getArea(), displayMe.getMaterialCost(),
                 displayMe.getLaborCost(), displayMe.getTax(), displayMe.getTotalCost());

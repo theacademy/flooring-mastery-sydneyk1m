@@ -67,4 +67,6 @@ public class Product {
     public void setLaborCostPerSquareFoot(BigDecimal laborCostPerSquareFoot) {
         this.laborCostPerSquareFoot = laborCostPerSquareFoot;
     }
+
+
 }

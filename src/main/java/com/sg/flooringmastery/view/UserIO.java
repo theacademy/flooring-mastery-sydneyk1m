@@ -7,6 +7,8 @@ import java.time.format.DateTimeFormatter;
 public interface UserIO {
     void print(String msg);
 
+    void printF(String msg, Object... args);
+
     double readDouble(String prompt);
 
     double readDouble(String prompt, double min, double max);

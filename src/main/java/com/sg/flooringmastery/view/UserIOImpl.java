@@ -21,6 +21,17 @@ public class UserIOImpl implements UserIO{
     }
 
     /**
+     * Prints a formatted string.
+     * @param msg message to be printed
+     * @param args the arguments that should be formatted into the string.
+     */
+    @Override
+    public void printF(String msg, Object... args) {
+        System.out.printf(msg, args);
+
+    }
+
+    /**
      * Reads a string input from the user.
      * @param prompt the prompt for the input
      * @return the string input

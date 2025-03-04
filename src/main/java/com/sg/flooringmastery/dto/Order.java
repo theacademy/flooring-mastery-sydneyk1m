@@ -20,6 +20,15 @@ public class Order {
     private BigDecimal total;
     private LocalDate date;
 
+    /**
+     * Constructs a new Order with assigned parameters.
+     * @param orderNumber the order number
+     * @param customerName the customer's name
+     * @param state the state
+     * @param product the product
+     * @param area the area
+     * @param date the date
+     */
     public Order(Integer orderNumber, String customerName, String state,
                  Product product, BigDecimal area, LocalDate date) {
         this.orderNumber = orderNumber;
@@ -120,6 +129,40 @@ public class Order {
      */
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    /**
+     * Calculates and returns the cost of materials for the order.
+     * @return the cost of materials for the order.
+     */
+    public BigDecimal getMaterialCost() {
+        return area.multiply(product.getCostPerSquareFoot());
+    }
+
+    /**
+     * Calculates and returns the cost of labor for the order.
+     * @return the cost of labor for the order.
+     */
+    public BigDecimal getLaborCost() {
+        return area.multiply(product.getLaborCostPerSquareFoot());
+    }
+
+    /**
+     * Not to be confused with getTaxObject().
+     * Returns the taxes incurred based on the state and the expenses.
+     * @return taxes incurred
+     */
+    public BigDecimal getTax() {
+        BigDecimal hundred = new BigDecimal("100");
+        return ((getMaterialCost().add(getLaborCost())).multiply(getTaxObject().getTaxRate())).divide(hundred);
+    }
+
+    /**
+     * Calculates the order's total cost.
+     * @return the total cost
+     */
+    public BigDecimal getTotalCost() {
+        return (getMaterialCost().add(getLaborCost())).add(getTax());
     }
 
 
