@@ -78,8 +78,12 @@ public class FlooringController {
     private void addOrder() {
         Order newOrder = service.createNewOrder(
                 view.askForCustomerName(),
-                view.askForStateAbbr(),
+                view.askForStateAbbr(service.getAcceptableStates()),
+                view.askForProductType(service.getAvailableProducts()),
+                view.askForArea(),
+                view.askForDate()
+        );
 
-        )
+        if (view.placeOrderConfirmation(newOrder))
     }
 }

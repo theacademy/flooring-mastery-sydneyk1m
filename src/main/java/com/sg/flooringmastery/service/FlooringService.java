@@ -56,4 +56,11 @@ public interface FlooringService {
      */
     Order getOrder(Integer orderNumber);
 
+    /**
+     * Gets a set of all valid states you can sell to.
+     * @return set of state abbreviations
+     */
+    Set<String> getAcceptableStates();
+
+    Set<Product> getAvailableProducts();
 }

@@ -49,4 +49,16 @@ public class FlooringServiceImpl implements FlooringService{
         return null;
     }
 
+    @Override
+    public Set<String> getAcceptableStates() {
+        // TODO: FINISH THIS
+        return Set.of();
+    }
+
+    @Override
+    public Set<Product> getAvailableProducts() {
+        // TODO: FINISH THIS
+        return Set.of();
+    }
+
 }
