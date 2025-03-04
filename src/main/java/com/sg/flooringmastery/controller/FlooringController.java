@@ -84,6 +84,14 @@ public class FlooringController {
                 view.askForDate()
         );
 
-        if (view.placeOrderConfirmation(newOrder))
+        // If you would still like to place this order
+        if (view.placeOrderConfirmation(newOrder)) {
+            // if it was successfully added
+            if (service.addOrder(newOrder)) {
+                view.displaySuccessfulOrder(newOrder.getCustomerName());
+            } else {
+                view.displayFailedOrder();
+            }
+        }
     }
 }

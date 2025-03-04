@@ -63,6 +63,21 @@ public class FlooringView {
     }
 
     /**
+     * Displays a note letting the user know their order was placed successfully.
+     * @param customerName the customer's name
+     */
+    public void displaySuccessfulOrder(String customerName) {
+        io.print("* * * ORDER SUCCESSFULLY PLACED FOR " +  customerName.toUpperCase() +"* * *");
+    }
+
+    /**
+     * Displays a note letting the user know their order failed.
+     */
+    public void displayFailedOrder() {
+        io.print("* * * ORDER FAILED. PLEASE TRY AGAIN. * * *");
+    }
+
+    /**
      * Prompts the user for the customer's name.
      * @return the customer's name
      */
