@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Set;
 
-@Component
 public interface FlooringService {
 
     /**
@@ -23,7 +22,7 @@ public interface FlooringService {
      * @param order the order to be added
      * @return true if success, false if failure
      */
-    boolean addOrder(Order order);
+    void addOrder(Order order);
 
     /**
      * Creates a new order object based off of five initial inputs.
@@ -47,14 +46,18 @@ public interface FlooringService {
      */
     Order editOrder(Integer orderNumber, String customerName, String stateAbbreviation, String productType, BigDecimal area);
 
-    boolean replacedOrder(Order order);
+    /**
+     * Replaces/updates the existing order.
+     * @param order
+     */
+    void replacedOrder(Order order);
 
     /**
      * Removes an order.
      * @param order the order to be removed
      * @return true if success, false if failure
      */
-    boolean removeOrder(Order order);
+    void removeOrder(Order order);
 
     /**
      * Gets an order based on its order number.

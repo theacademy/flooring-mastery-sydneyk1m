@@ -4,6 +4,7 @@ import com.sg.flooringmastery.controller.FlooringController;
 import com.sg.flooringmastery.dto.Order;
 import com.sg.flooringmastery.dto.Product;
 import com.sg.flooringmastery.dto.Tax;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +24,7 @@ public class FlooringDaoImpl implements FlooringDao{
     private Map<Integer, Order> orderMap;
 
     // <product type (name), Product>
-    private Map<Integer, Product> productMap;
+    private Map<String, Product> productMap;
 
     // <State abbreviation, Tax information>
     private Map<String, Tax> taxMap;
@@ -41,7 +42,8 @@ public class FlooringDaoImpl implements FlooringDao{
      * Default constructor.
      */
     public FlooringDaoImpl() {
-        DATA_FOLDER = "/data"; // because we want to access many different files inside this folder
+        DATA_FOLDER = "data"; // because we want to access many different files inside this folder
+        loadData();
     }
 
     /**
@@ -50,6 +52,7 @@ public class FlooringDaoImpl implements FlooringDao{
      */
     public FlooringDaoImpl(String dataFolder) {
         DATA_FOLDER = dataFolder;
+        loadData();
     }
 
     /**
@@ -71,8 +74,7 @@ public class FlooringDaoImpl implements FlooringDao{
         try {
             return orderMap.values().stream().filter(order -> order.getDate().equals(date)).collect(Collectors.toSet());
         } catch (NullPointerException e) {
-            return null;
-            // TODO: MUST DEAL WITH PROBLEM WHERE IF ORDERS IS NULL THERE IS AN UGLY EXCEPTION
+            throw new FlooringPersistenceException("Unable to get orders for this date.", e);
         }
     }
 
@@ -88,24 +90,30 @@ public class FlooringDaoImpl implements FlooringDao{
     /**
      * Adds the order.
      * @param order the order
-     * @return
      */
     @Override
-    public boolean addOrder(Order order) {
+    public void addOrder(Order order) {
         try {
             // does this add 1 to the order number regardless of success?
             orderMap.put(getNextOrderNumber(), order);
-            // write data
-        } catch (InvalidOrderException e) {
-            // failed
-            return false;
+            writeData();
+        } catch (FlooringPersistenceException e) {
+            throw new FlooringPersistenceException("The order was unable to be added.", e);
         }
-        return true;
     }
 
+    /**
+     * Removes the order.
+     * @param orderNumber the order number
+     */
     @Override
-    public boolean removeOrder(Integer orderNumber) {
-        return false;
+    public void removeOrder(Integer orderNumber) {
+        try {
+            orderMap.remove(orderNumber);
+            writeData();
+        } catch (FlooringPersistenceException e) {
+            throw new FlooringPersistenceException("The order was unable to be deleted.", e);
+        }
     }
 
     @Override
@@ -252,6 +260,9 @@ public class FlooringDaoImpl implements FlooringDao{
                         new BigDecimal(tokens[1]), // cost sq ft
                         new BigDecimal(tokens[2]) // labor cost sq ft
                 );
+
+                // insert each into productMap
+                productMap.put(tokens[0], extractedProduct);
             }
             sc.close();
 

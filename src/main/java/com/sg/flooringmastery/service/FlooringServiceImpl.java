@@ -1,6 +1,7 @@
 package com.sg.flooringmastery.service;
 
 import com.sg.flooringmastery.dao.FlooringDao;
+import com.sg.flooringmastery.dao.FlooringPersistenceException;
 import com.sg.flooringmastery.dto.Order;
 import com.sg.flooringmastery.dto.Product;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,6 @@ import java.util.Set;
 public class FlooringServiceImpl implements FlooringService{
     private FlooringDao dao;
 
-    @Autowired
     /**
      * Constructor for service using FlooringDao input.
      * @param dao the dao
@@ -29,8 +29,14 @@ public class FlooringServiceImpl implements FlooringService{
     }
 
     @Override
-    public boolean addOrder(Order order) {
-        return false;
+    public void addOrder(Order order) {
+        try {
+            Order newOrder = new Order(dao.getNextOrderNumber(), order.getCustomerName(),
+                    order.getTaxInfo(), order.getProduct(), order.getArea(), order.getDate());
+            dao.addOrder(newOrder);
+        } catch (FlooringPersistenceException e) {
+            throw new FlooringPersistenceException("Unable to add this order.", e);
+        }
     }
 
     @Override
@@ -74,18 +80,22 @@ public class FlooringServiceImpl implements FlooringService{
     }
 
     @Override
-    public boolean replacedOrder(Order order) {
-        return dao.addOrder(order);
+    public void replacedOrder(Order order) {
+        try {
+            dao.addOrder(order);
+        } catch (FlooringPersistenceException e) {
+            throw new FlooringPersistenceException("The order was unable to be overwritten.", e);
+        }
     }
 
 
     @Override
-    public boolean removeOrder(Order order) {
-        if (order == null) {
-            return false;
+    public void removeOrder(Order order) {
+        try {
+            dao.removeOrder(order.getOrderNumber());
+        } catch (FlooringPersistenceException e) {
+            throw new FlooringPersistenceException("Unable to remove this order.", e);
         }
-
-        return dao.removeOrder(order.getOrderNumber());
     }
 
     @Override

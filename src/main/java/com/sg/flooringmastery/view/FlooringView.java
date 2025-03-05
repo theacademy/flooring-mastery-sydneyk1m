@@ -19,7 +19,6 @@ public class FlooringView {
 
     private UserIO io = new UserIOImpl();
 
-    @Autowired
     public FlooringView(UserIO io) {
         this.io = io;
     }

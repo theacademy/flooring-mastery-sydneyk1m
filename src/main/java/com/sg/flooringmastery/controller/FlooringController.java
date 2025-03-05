@@ -1,6 +1,7 @@
 package com.sg.flooringmastery.controller;
 
 import com.sg.flooringmastery.dao.FlooringPersistenceException;
+import com.sg.flooringmastery.dao.InvalidOrderException;
 import com.sg.flooringmastery.dto.Order;
 import com.sg.flooringmastery.service.FlooringService;
 import com.sg.flooringmastery.view.FlooringView;
@@ -16,7 +17,6 @@ public class FlooringController {
     private FlooringView view;
     private FlooringService service;
 
-    @Autowired
     public FlooringController(FlooringView view, FlooringService service) {
         this.view = view;
         this.service = service;
@@ -99,14 +99,18 @@ public class FlooringController {
 
             // If you would still like to place this order
             if (view.placeOrderConfirmation(newOrder)) {
-                // if it was successfully added
-                if (service.addOrder(newOrder)) {
+                try {
+                    service.addOrder(newOrder);
+
+                    // if it was successfully added
                     view.displaySuccessfulOrder(newOrder.getCustomerName());
-                } else {
+
+                } catch (InvalidOrderException e) {
                     view.displayFailedOrder();
+
                 }
             }
-        } catch (FlooringPersistenceException e) {
+        } catch (InvalidOrderException e) {
             view.displayErrorMessage(e.getMessage());
         }
     }
@@ -140,10 +144,12 @@ public class FlooringController {
         view.displayRemoveOrderBanner();
         Order removeMe = service.getOrder(view.askForOrderNumber(service.getAllOrderNumbers()));
         Integer removedOrderNum = removeMe.getOrderNumber();
+
         if (view.removeOrderConfirmation(removeMe)) {
-            if (service.removeOrder(removeMe)) {
+            try {
+                service.removeOrder(removeMe);
                 view.displaySuccessfulRemove();
-            } else {
+            } catch (InvalidOrderException e) {
                 view.displayFailedRemove(removedOrderNum);
             }
         }

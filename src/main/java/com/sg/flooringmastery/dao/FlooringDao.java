@@ -3,6 +3,7 @@ package com.sg.flooringmastery.dao;
 import com.sg.flooringmastery.dto.Order;
 import com.sg.flooringmastery.dto.Product;
 import com.sg.flooringmastery.dto.Tax;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -34,9 +35,9 @@ public interface FlooringDao {
      * @param order the order
      * @return true if success, false if failure
      */
-    boolean addOrder(Order order);
+    void addOrder(Order order);
 
-    boolean removeOrder(Integer orderNumber);
+    void removeOrder(Integer orderNumber);
 
     Product getProductFromProductType(String productType);
 
