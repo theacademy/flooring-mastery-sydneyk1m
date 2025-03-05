@@ -39,21 +39,20 @@ public class FlooringController {
                         removeOrder();
                         break;
                     case 5:
-//                        exportAllData();
+                        exportAllData();
                         break;
                     case 6:
                         keepGoing = false;
                         break;
                     default:
-//                        unknownCommand();
+                        unknownCommand();
                         break;
                 }
             }
         } catch (FlooringPersistenceException e) {
             view.displayErrorMessage(e.getMessage());
         }
-        System.out.println("exiting");
-//        view.displayExitBanner();
+        exitMessage();
     }
 
     /**
@@ -135,7 +134,31 @@ public class FlooringController {
     private void removeOrder() {
         view.displayRemoveOrderBanner();
         Order removeMe = service.getOrder(view.askForOrderNumber(service.getAllOrderNumbers()));
-        if (view.removeOrderConfirmation(order))
+        Integer removedOrderNum = removeMe.getOrderNumber();
+        if (view.removeOrderConfirmation(removeMe)) {
+            if (service.removeOrder(removeMe)) {
+                view.displaySuccessfulRemove();
+            } else {
+                view.displayFailedRemove(removedOrderNum);
+            }
+        }
+    }
 
+    private void exportAllData() {
+
+    }
+
+    /**
+     * Displays an unknown command acknowledgement.
+     */
+    private void unknownCommand() {
+        view.displayUnknownCommandBanner();
+    }
+
+    /**
+     * Displays an exit message upon exiting the program.
+     */
+    private void exitMessage() {
+        view.displayExitBanner();
     }
 }

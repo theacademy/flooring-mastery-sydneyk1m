@@ -86,14 +86,13 @@ public class FlooringView {
     public void displayOrders(Set<Order> orders) {
 
         if (orders == null || orders.isEmpty()) {
-            io.print("No orders were found for the selected date. Try again! \n");
+            io.print("No orders were found for the selected date.\n");
             return;
         }
 
         for (Order order : orders) {
             displayOrder(order);
         }
-
     }
 
     /**
@@ -117,6 +116,22 @@ public class FlooringView {
 
     public void displayFailedEdit(Integer failedOrderNum) {
         io.print("* * * ORDER #" + failedOrderNum + " WAS NOT EDITED. TRY AGAIN. * * *");
+    }
+
+    public void displaySuccessfulRemove() {
+        io.print("* * * ORDER WAS SUCCESSFULLY REMOVED * * *");
+    }
+
+    public void displayFailedRemove(Integer failedOrderNum) {
+        io.print("* * * ORDER #" + failedOrderNum + " WAS NOT REMOVED. TRY AGAIN. * * *");
+    }
+
+    public void displayUnknownCommandBanner() {
+        io.print("* * * UNKNOWN COMMAND DETECTED * * *");
+    }
+
+    public void displayExitBanner() {
+        io.print("* * * EXITING THE PROGRAM. COME BACK SOON! * * *");
     }
 
     /**
@@ -266,6 +281,23 @@ public class FlooringView {
         io.print("* * * EDITING ORDER IN PROGRESS * * *");
         displayOrder(editOrder);
         String confirmation = io.readString("Still want to edit this order? (y/n)");
+        return confirmation.equalsIgnoreCase("y");
+    }
+
+    /**
+     * Display the order to be removed, then ask if the user would still like to go ahead and
+     * remove it.
+     * @param removeOrder order to be removed
+     * @return true if we want to remove, false if we don't want to
+     */
+    public boolean removeOrderConfirmation(Order removeOrder) {
+        if (removeOrder == null) {
+            return true;
+        }
+
+        io.print("* * * ORDER DETAILS * * *");
+        displayOrder(removeOrder);
+        String confirmation = io.readString("Still want to remove this order? This cannot be reversed. (y/n)");
         return confirmation.equalsIgnoreCase("y");
     }
 
