@@ -1,5 +1,6 @@
 package com.sg.flooringmastery.dao;
 
+import com.sg.flooringmastery.controller.FlooringController;
 import com.sg.flooringmastery.dto.Order;
 import com.sg.flooringmastery.dto.Product;
 import com.sg.flooringmastery.dto.Tax;
@@ -163,6 +164,8 @@ public class FlooringDaoImpl implements FlooringDao{
                         dateExtractedString = matcher.group(1);
                     }
                     LocalDate dateExtracted = LocalDate.parse(dateExtractedString, dateFormatter);
+
+                    // skip header
                     sc.nextLine();
 
                     // UNMARSHALLING HERE
@@ -195,6 +198,37 @@ public class FlooringDaoImpl implements FlooringDao{
 
         } catch (NullPointerException | FileNotFoundException e) {
             throw new FlooringPersistenceException("-_- Could not load order data into memory.", e);
+        }
+        return true;
+    }
+
+    /**
+     * Reads tax data from Taxes.txt.
+     * @return true if success false if failure
+     */
+    private boolean readTaxData() {
+        try {
+            Scanner sc;
+            sc = new Scanner(new BufferedReader(new FileReader(DATA_FOLDER + "/Taxes.txt")));
+
+            taxMap = new HashMap<>();
+
+            // skip header
+            sc.nextLine();
+
+            while (sc.hasNextLine()) {
+                String[] tokens = sc.nextLine().split(",");
+                // StateAbbr,StateName,TaxRate
+                Tax extractedTax = new Tax(tokens[0], // state abbr
+                        tokens[1], // state name
+                        new BigDecimal(tokens[2])); // tax rate
+
+                taxMap.put(tokens[0], extractedTax);
+            }
+            sc.close();
+
+        } catch (FileNotFoundException e) {
+            throw new FlooringPersistenceException("-_- Could not load tax data into memory.", e);
         }
         return true;
     }
