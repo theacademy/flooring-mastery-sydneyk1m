@@ -31,7 +31,11 @@ public class FlooringServiceImpl implements FlooringService{
 
     @Override
     public Order createNewOrder(String customerName, String stateAbbr, String productType, BigDecimal area, LocalDate date) {
-        return null;
+        if (customerName == null || stateAbbr == null || productType == null || area == null) {
+            // none of these can be null. must reprompt
+            return null;
+        }
+        Order order = new Order(null, customerName, dao.get )
     }
 
     @Override
@@ -41,24 +45,31 @@ public class FlooringServiceImpl implements FlooringService{
 
     @Override
     public boolean removeOrder(Order order) {
-        return false;
+        if (order == null) {
+            return false;
+        }
+
+        return dao.removeOrder(order.getOrderNumber());
     }
 
     @Override
     public Order getOrder(Integer orderNumber) {
-        return null;
+        return dao.getOrder(orderNumber);
     }
 
     @Override
     public Set<String> getAcceptableStates() {
-        // TODO: FINISH THIS
-        return Set.of();
+        return dao.getAcceptableStates();
     }
 
     @Override
     public Set<Product> getAvailableProducts() {
-        // TODO: FINISH THIS
-        return Set.of();
+        return dao.getAvailableProducts();
+    }
+
+    @Override
+    public Set<Integer> getAllOrderNumbers() {
+        return dao.getAllOrderNumbers();
     }
 
 }

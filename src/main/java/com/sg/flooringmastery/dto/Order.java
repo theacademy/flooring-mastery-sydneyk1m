@@ -6,7 +6,7 @@ import java.time.LocalDate;
 public class Order {
     private Integer orderNumber;
     private String customerName;
-    private Tax taxObject; // stateName can be derived from Tax obj
+    private Tax taxInfo; // stateName can be derived from Tax obj
     private String state;
     private BigDecimal taxRate;
     private Product product; // productName can be derived from Product obj
@@ -24,16 +24,16 @@ public class Order {
      * Constructs a new Order with assigned parameters.
      * @param orderNumber the order number
      * @param customerName the customer's name
-     * @param state the state
+     * @param taxInfo the tax associated information
      * @param product the product
      * @param area the area
      * @param date the date
      */
-    public Order(Integer orderNumber, String customerName, String state,
+    public Order(Integer orderNumber, String customerName, Tax taxInfo,
                  Product product, BigDecimal area, LocalDate date) {
         this.orderNumber = orderNumber;
         this.customerName = customerName;
-        this.state = state;
+        this.taxInfo = taxInfo;
         this.product = product;
         this.area = area;
         this.date = date;
@@ -48,7 +48,7 @@ public class Order {
     }
 
     /**
-     * Sets the order number.
+     * Sets the order number. NOT to be used by the client.
      * @param orderNumber the order number
      */
     public void setOrderNumber(Integer orderNumber) {
@@ -72,19 +72,19 @@ public class Order {
     }
 
     /**
-     * Returns the Tax object.
-     * @return the tax object
+     * Returns the Tax information object.
+     * @return the tax information object
      */
-    public Tax getTaxObject() {
-        return taxObject;
+    public Tax getTaxInfo() {
+        return taxInfo;
     }
 
     /**
      * Sets the Tax.
-     * @param taxObject the tax object
+     * @param taxInfo the tax information object
      */
-    public void setTaxObject(Tax taxObject) {
-        this.taxObject = taxObject;
+    public void setTaxInfo(Tax taxInfo) {
+        this.taxInfo = taxInfo;
     }
 
     /**
@@ -111,6 +111,10 @@ public class Order {
         return product;
     }
 
+    /**
+     * Sets the product.
+     * @param product the product
+     */
     public void setProduct(Product product) {
         this.product = product;
     }
@@ -154,7 +158,7 @@ public class Order {
      */
     public BigDecimal getTax() {
         BigDecimal hundred = new BigDecimal("100");
-        return ((getMaterialCost().add(getLaborCost())).multiply(getTaxObject().getTaxRate())).divide(hundred);
+        return ((getMaterialCost().add(getLaborCost())).multiply(getTaxInfo().getTaxRate())).divide(hundred);
     }
 
     /**

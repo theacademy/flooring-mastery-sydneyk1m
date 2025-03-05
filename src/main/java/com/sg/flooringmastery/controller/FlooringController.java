@@ -1,5 +1,6 @@
 package com.sg.flooringmastery.controller;
 
+import com.sg.flooringmastery.dao.FlooringPersistenceException;
 import com.sg.flooringmastery.dto.Order;
 import com.sg.flooringmastery.service.FlooringService;
 import com.sg.flooringmastery.view.FlooringView;
@@ -35,21 +36,24 @@ public class FlooringController {
                         editOrder();
                         break;
                     case 4:
-                        removeOrder();
+//                        removeOrder();
                         break;
                     case 5:
-                        exportAllData();
+//                        exportAllData();
                         break;
                     case 6:
                         keepGoing = false;
                         break;
                     default:
-                        unknownCommand();
+//                        unknownCommand();
                         break;
                 }
             }
+        } catch (FlooringPersistenceException e) {
+            view.displayErrorMessage(e.getMessage());
         }
-        view.displayExitBanner();
+        System.out.println("exiting");
+//        view.displayExitBanner();
     }
 
     /**
@@ -72,29 +76,50 @@ public class FlooringController {
         // get orders from service
         Set<Order> ordersToDisplay = service.getOrdersByDate(date);
         view.displayOrders(ordersToDisplay);
-        // TODO: STOPPED HERE
     }
 
     /**
      * Adds a new order.
      */
-    private void addOrder() {
-        Order newOrder = service.createNewOrder(
-                view.askForCustomerName(),
-                view.askForStateAbbr(service.getAcceptableStates()),
-                view.askForProductType(service.getAvailableProducts()),
-                view.askForArea(),
-                view.askForDate()
+    private void addOrder() throws FlooringPersistenceException{
+        try {
+
+            Order newOrder = service.createNewOrder(
+                    view.askForCustomerName(),
+                    view.askForStateAbbr(service.getAcceptableStates()),
+                    view.askForProductType(service.getAvailableProducts()),
+                    view.askForArea(),
+                    view.askForDate()
+            );
+
+            // If you would still like to place this order
+            if (view.placeOrderConfirmation(newOrder)) {
+                // if it was successfully added
+                if (service.addOrder(newOrder)) {
+                    view.displaySuccessfulOrder(newOrder.getCustomerName());
+                } else {
+                    view.displayFailedOrder();
+                }
+            }
+        } catch (FlooringPersistenceException e) {
+            view.displayErrorMessage(e.getMessage());
+        }
+    }
+
+    private void editOrder() {
+        view.displayEditOrderBanner();
+        Integer orderNum = view.askForOrderNumber(service.getAllOrderNumbers());
+        Order oldOrder = service.getOrder(orderNum);
+        Order newOrder = service.editOrder(
+                view.askForOrderNumber(service.getAllOrderNumbers()),
+                view.askForEditedCustomerName(oldOrder.getCustomerName()),
+                view.askForEditedStateAbbr(),
+                view.askForEditedProductType(),
+                view.askForEditedArea()
         );
 
-        // If you would still like to place this order
-        if (view.placeOrderConfirmation(newOrder)) {
-            // if it was successfully added
-            if (service.addOrder(newOrder)) {
-                view.displaySuccessfulOrder(newOrder.getCustomerName());
-            } else {
-                view.displayFailedOrder();
-            }
-        }
+
+
+        )
     }
 }

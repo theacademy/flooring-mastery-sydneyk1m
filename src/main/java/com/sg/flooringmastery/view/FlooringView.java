@@ -4,17 +4,19 @@ import com.sg.flooringmastery.dto.Order;
 import com.sg.flooringmastery.dto.Product;
 
 import java.math.BigDecimal;
-import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
 
 public class FlooringView {
 
     private UserIO io = new UserIOImpl();
+
+    public FlooringView(UserIO io) {
+        this.io = io;
+    }
 
     /**
      * Displays a welcome banner to be shown every time the menu
@@ -56,7 +58,7 @@ public class FlooringView {
         // total cost $%.2f
 
         io.printF("%s - %s %s : %s - %.0f sq ft\n $%.2f + $%.2f (+ $%.2f) = $%.2f\n",
-                orderNumber, displayMe.getCustomerName(), displayMe.getTaxObject().getStateName(),
+                orderNumber, displayMe.getCustomerName(), displayMe.getTaxInfo().getStateName(),
                 displayMe.getProduct().getProductType(), displayMe.getArea(), displayMe.getMaterialCost(),
                 displayMe.getLaborCost(), displayMe.getTax(), displayMe.getTotalCost());
 
@@ -85,6 +87,15 @@ public class FlooringView {
      */
     public void displayFailedOrder() {
         io.print("* * * ORDER FAILED. PLEASE TRY AGAIN. * * *");
+    }
+
+    /**
+     * Prompts the user for the order number.
+     * @return the order number
+     */
+    public Integer askForOrderNumber(Set<Integer> existingOrderNumbers) {
+        io.print("Here are all the existing order numbers: " + existingOrderNumbers);
+        return io.readInt("Which order number would you like to select?");
     }
 
     /**
@@ -205,5 +216,72 @@ public class FlooringView {
 
         io.print("* * * ORDER IN PROGRESS * * *");
         displayOrder(newOrder);
+        String confirmation = io.readString("Still want to place this order? (y/n)");
+        return confirmation.equalsIgnoreCase("y");
+    }
+
+    /**
+     * Display all inputted parameters, then ask if the user would still like to
+     * go ahead with the order.
+     * @param editOrder the order being checked
+     * @return true if we would like to proceed to order, false if we don't proceed
+     */
+    public boolean editOrderConfirmation(Order editOrder) {
+        if (editOrder == null) {
+            return true;
+        }
+
+        io.print("* * * EDITING ORDER IN PROGRESS * * *");
+        displayOrder(editOrder);
+        String confirmation = io.readString("Still want to edit this order? (y/n)");
+        return confirmation.equalsIgnoreCase("y");
+    }
+
+    public void displayErrorMessage(String message) {
+        io.print("* * * AN ERROR HAS OCCURRED * * *");
+        io.print(message);
+        io.readString("Please hit enter to continue.");
+    }
+
+    public void displayEditOrderBanner() {
+        io.print("* * * EDITING ORDER * * *");
+        io.print("* NOTE: IF YOU'D LIKE TO KEEP EXISTING VALUES, SIMPLY PRESS ENTER *");
+    }
+
+    /********* EDITING METHODS PAST THIS POINT *********/
+    public String askForEditedCustomerName(String oldName) {
+        while (true) {
+            String newName = io.readString("Enter the customer name (" + oldName + "): ");
+
+            // if they enter null, then we want to keep the old name.
+            if (newName.isBlank()) {
+                return oldName;
+            }
+
+            if (newName.matches("[A-z0-9,. ]+")) { // Check if valid
+                return newName;
+            }
+
+            io.print("Invalid input. Please try again and enter a valid name.");
+        }
+    }
+
+
+    public String askForEditedStateAbbr(Set<String> acceptableStates) {
+        io.print("Here are the valid states we ship to: " + acceptableStates);
+
+        while(true) {
+            String stateAbbr = io.readString("What is the state associated with this order?");
+
+            if (stateAbbr.isBlank()) { // cannot be null
+                return null;
+            }
+
+            if (acceptableStates.contains(stateAbbr)) { // must be contained in tax file
+                return stateAbbr;
+            }
+
+            io.print("The entered state is invalid. Please enter one within the valid list provided.");
+        }
     }
 }

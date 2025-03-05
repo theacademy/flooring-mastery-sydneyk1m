@@ -63,4 +63,6 @@ public interface FlooringService {
     Set<String> getAcceptableStates();
 
     Set<Product> getAvailableProducts();
+
+    Set<Integer> getAllOrderNumbers();
 }
