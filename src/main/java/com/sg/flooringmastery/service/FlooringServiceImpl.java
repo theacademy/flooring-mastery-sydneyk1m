@@ -35,13 +35,45 @@ public class FlooringServiceImpl implements FlooringService{
             // none of these can be null. must reprompt
             return null;
         }
-        Order order = new Order(null, customerName, dao.get )
+        // should we set the next order number already here?
+        Order order = new Order(dao.getNextOrderNumber(), customerName, dao.getTaxInfoFromAbbr(stateAbbr), dao.getProductFromProductType(productType), area, date);
+        return order;
+    }
+
+    /**
+     * Edits an existing order by aggregating old and new info into a new object.
+     * @param orderNumber the order number
+     * @param customerName the customer's name
+     * @param stateAbbreviation the state abbreviation
+     * @param productType the product type
+     * @param area the area ordered
+     * @return
+     */
+    @Override
+    public Order editOrder(Integer orderNumber, String customerName, String stateAbbreviation, String productType, BigDecimal area) {
+        Order oldOrder = getOrder(orderNumber);
+        if (oldOrder == null) {
+            return null;
+        }
+
+        // variable = Expression1 ? Expression2: Expression3
+        // if expr1 true, then var =2. otherwise, var = 3
+        Order newOrder = new Order(
+                orderNumber,
+                customerName == null ? oldOrder.getCustomerName() : customerName,
+                stateAbbreviation == null ? oldOrder.getTaxInfo() : dao.getTaxInfoFromAbbr(stateAbbreviation),
+                productType == null ? oldOrder.getProduct() : dao.getProductFromProductType(productType),
+                area == null ? oldOrder.getArea() : area,
+                oldOrder.getDate()
+        );
+        return newOrder;
     }
 
     @Override
-    public boolean editOrder(Order order) {
-        return false;
+    public boolean replacedOrder(Order order) {
+        return dao.addOrder(order);
     }
+
 
     @Override
     public boolean removeOrder(Order order) {

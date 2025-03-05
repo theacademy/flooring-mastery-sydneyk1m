@@ -89,6 +89,11 @@ public class FlooringDaoImpl implements FlooringDao{
         return taxMap.get(stateAbbr);
     }
 
+    @Override
+    public Product getProductFromProductType(String productType) {
+        return productMap.get(productType);
+    }
+
     public Order getOrderFromOrderNumber(Integer orderNumber) {
         return orderMap.get(orderNumber);
     }

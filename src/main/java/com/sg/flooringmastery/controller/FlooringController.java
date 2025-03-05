@@ -106,6 +106,9 @@ public class FlooringController {
         }
     }
 
+    /**
+     * Edits an existing order.
+     */
     private void editOrder() {
         view.displayEditOrderBanner();
         Integer orderNum = view.askForOrderNumber(service.getAllOrderNumbers());
@@ -113,13 +116,15 @@ public class FlooringController {
         Order newOrder = service.editOrder(
                 view.askForOrderNumber(service.getAllOrderNumbers()),
                 view.askForEditedCustomerName(oldOrder.getCustomerName()),
-                view.askForEditedStateAbbr(),
-                view.askForEditedProductType(),
-                view.askForEditedArea()
+                view.askForEditedStateAbbr(service.getAcceptableStates(), oldOrder.getTaxInfo().getStateAbbr()),
+                view.askForEditedProductType(service.getAvailableProducts(), oldOrder.getProduct().getProductType()),
+                view.askForEditedArea(oldOrder.getArea())
         );
-
-
-
-        )
+        // Ask if they'd like to confirm editing the order
+        if (view.editOrderConfirmation(newOrder)) {
+            view.displaySuccessfulEdit(orderNum);
+        } else {
+            view.displayFailedEdit(orderNum);
+        }
     }
 }

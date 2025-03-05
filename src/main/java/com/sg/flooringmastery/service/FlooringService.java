@@ -35,12 +35,17 @@ public interface FlooringService {
     Order createNewOrder(String customerName, String stateAbbr, String productType, BigDecimal area, LocalDate date);
 
     /**
-     * Edits an existing order.
-     * @param order the order to edit
-     * @return true if success, false if failure
+     * Edits an existing order by subbing in newly defined values
+     * @param orderNumber the order number
+     * @param customerName the customer's name
+     * @param stateAbbreviation the state abbreviation
+     * @param productType the product type
+     * @param area the area ordered
+     * @return the newly updated order
      */
-    boolean editOrder(Order order);
+    Order editOrder(Integer orderNumber, String customerName, String stateAbbreviation, String productType, BigDecimal area);
 
+    boolean replacedOrder(Order order);
 
     /**
      * Removes an order.

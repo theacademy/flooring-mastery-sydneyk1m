@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class FlooringView {
 
@@ -82,11 +83,19 @@ public class FlooringView {
         io.print("* * * ORDER SUCCESSFULLY PLACED FOR " +  customerName.toUpperCase() +"* * *");
     }
 
+    public void displaySuccessfulEdit(Integer editedOrderNumber) {
+        io.print("* * * ORDER #" + editedOrderNumber + " WAS SUCCESSFULLY EDITED * * *");
+    }
+
     /**
      * Displays a note letting the user know their order failed.
      */
     public void displayFailedOrder() {
         io.print("* * * ORDER FAILED. PLEASE TRY AGAIN. * * *");
+    }
+
+    public void displayFailedEdit(Integer failedOrderNum) {
+        io.print("* * * ORDER #" + failedOrderNum + " WAS NOT EDITED. TRY AGAIN. * * *");
     }
 
     /**
@@ -160,12 +169,14 @@ public class FlooringView {
      * Prompts the user for the product type.
      * @return the product type (Can access from Product)
      */
-    public String askForProductType(Set<Product> productSet) {
+    public String askForProductType(Set<Product> availableProducts) {
         String productType;
 
         // display all available products and their pricing
         io.print("Here are all of our product options.");
-        // lambda.........
+        io.print("Products: " + availableProducts.stream().map(prod -> prod.getProductType() +
+                ": \n material cost: $" + prod.getCostPerSquareFoot() + "/square foot & labor cost: $" +
+                prod.getLaborCostPerSquareFoot() + "/square foot").collect(Collectors.joining(",", "[", "]")));
 
         while (true) {
             productType = io.readString("What product type would you like to select?");
@@ -173,7 +184,7 @@ public class FlooringView {
                 return null;
             }
 
-            for (Product product : productSet) {
+            for (Product product : availableProducts) {
                 // how to ignore case Lol
                 if (Objects.equals(product.getProductType(), productType)) { // should this be product and not product.getType?
                     return productType;
@@ -267,14 +278,15 @@ public class FlooringView {
     }
 
 
-    public String askForEditedStateAbbr(Set<String> acceptableStates) {
+    public String askForEditedStateAbbr(Set<String> acceptableStates, String oldOrderStateAbbr) {
         io.print("Here are the valid states we ship to: " + acceptableStates);
 
         while(true) {
-            String stateAbbr = io.readString("What is the state associated with this order?");
+            String stateAbbr = io.readString("Enter the state (" + oldOrderStateAbbr + "): ");
 
-            if (stateAbbr.isBlank()) { // cannot be null
-                return null;
+            if (stateAbbr.isBlank()) {
+                // if they press enter, just set it to the old one
+                return oldOrderStateAbbr;
             }
 
             if (acceptableStates.contains(stateAbbr)) { // must be contained in tax file
@@ -282,6 +294,51 @@ public class FlooringView {
             }
 
             io.print("The entered state is invalid. Please enter one within the valid list provided.");
+        }
+    }
+
+    public String askForEditedProductType(Set<Product> availableProducts, String oldProductType) {
+        String newProductType;
+
+        // display all available products and their pricing
+        io.print("Here are all of our product options.");
+        io.print("Products: " + availableProducts.stream().map(prod -> prod.getProductType() +
+                ": \n material cost: $" + prod.getCostPerSquareFoot() + "/square foot & labor cost: $" +
+                prod.getLaborCostPerSquareFoot() + "/square foot").collect(Collectors.joining(",", "[", "]")));
+
+        while (true) {
+            newProductType = io.readString("Enter the product type you'd like (" + oldProductType + "): ");
+            if (newProductType.isBlank()) { // newline, we'd like to keep the old
+                return oldProductType;
+            }
+
+            for (Product product : availableProducts) {
+                // how to ignore case Lol
+                if (Objects.equals(product.getProductType(), newProductType)) { // should this be product and not product.getType?
+                    return newProductType;
+                }
+            }
+        }
+    }
+
+    public BigDecimal askForEditedArea(BigDecimal oldArea) {
+        String newAreaString;
+        BigDecimal hundred = new BigDecimal("100");
+
+        while (true) {
+            newAreaString = io.readString("Enter the desired area to order (" + oldArea.toString() + "): ");
+
+            if (newAreaString.isBlank()) { // newline equals give the old area
+                return oldArea;
+            }
+
+            BigDecimal area = new BigDecimal(newAreaString);
+
+            // if area reaches minimum, approve
+            if (area.compareTo(hundred) >= 0) {
+                return area;
+            }
+            io.print("You need to order at least 100 square feet. Try again!");
         }
     }
 }

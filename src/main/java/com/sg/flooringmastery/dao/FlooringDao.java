@@ -45,6 +45,8 @@ public interface FlooringDao {
      */
     Order getOrderFromOrderNumber(Integer orderNumber);
 
+    Product getProductFromProductType(String productType);
+
     /**
      * Identifies the associated tax information from an abbreviation.
      * @param stateAbbr the state abbreviation
