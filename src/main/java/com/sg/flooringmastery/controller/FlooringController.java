@@ -36,7 +36,7 @@ public class FlooringController {
                         editOrder();
                         break;
                     case 4:
-//                        removeOrder();
+                        removeOrder();
                         break;
                     case 5:
 //                        exportAllData();
@@ -82,6 +82,7 @@ public class FlooringController {
      * Adds a new order.
      */
     private void addOrder() throws FlooringPersistenceException{
+        view.displayAddOrderBanner();
         try {
 
             Order newOrder = service.createNewOrder(
@@ -126,5 +127,15 @@ public class FlooringController {
         } else {
             view.displayFailedEdit(orderNum);
         }
+    }
+
+    /**
+     * Removes an order.
+     */
+    private void removeOrder() {
+        view.displayRemoveOrderBanner();
+        Order removeMe = service.getOrder(view.askForOrderNumber(service.getAllOrderNumbers()));
+        if (view.removeOrderConfirmation(order))
+
     }
 }

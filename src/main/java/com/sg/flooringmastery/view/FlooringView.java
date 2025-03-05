@@ -1,5 +1,6 @@
 package com.sg.flooringmastery.view;
 
+import com.sg.flooringmastery.dao.FlooringPersistenceException;
 import com.sg.flooringmastery.dto.Order;
 import com.sg.flooringmastery.dto.Product;
 
@@ -26,6 +27,19 @@ public class FlooringView {
     public void displayWelcomeBanner() {
         io.print("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ");
         io.print("* * * * * * * * *  WELCOME TO THE FLOORING PROGRAM  * * * * * * * * *");
+    }
+
+    public void displayAddOrderBanner() {
+        io.print("* * * ADDING NEW ORDER * * *");
+    }
+
+    public void displayEditOrderBanner() {
+        io.print("* * * EDITING ORDER * * *");
+        io.print("* NOTE: IF YOU'D LIKE TO KEEP EXISTING VALUES, SIMPLY PRESS ENTER WHEN PROMPTED FOR A VALUE *");
+    }
+
+    public void displayRemoveOrderBanner() {
+        io.print("* * * REMOVING ORDER * * *");
     }
 
     public int displayMenu() {
@@ -70,9 +84,16 @@ public class FlooringView {
      * @param orders the set of orders.
      */
     public void displayOrders(Set<Order> orders) {
+
+        if (orders == null || orders.isEmpty()) {
+            io.print("No orders were found for the selected date. Try again! \n");
+            return;
+        }
+
         for (Order order : orders) {
             displayOrder(order);
         }
+
     }
 
     /**
@@ -252,11 +273,6 @@ public class FlooringView {
         io.print("* * * AN ERROR HAS OCCURRED * * *");
         io.print(message);
         io.readString("Please hit enter to continue.");
-    }
-
-    public void displayEditOrderBanner() {
-        io.print("* * * EDITING ORDER * * *");
-        io.print("* NOTE: IF YOU'D LIKE TO KEEP EXISTING VALUES, SIMPLY PRESS ENTER *");
     }
 
     /********* EDITING METHODS PAST THIS POINT *********/
