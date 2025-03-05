@@ -4,12 +4,10 @@ import com.sg.flooringmastery.controller.FlooringController;
 import com.sg.flooringmastery.dto.Order;
 import com.sg.flooringmastery.dto.Product;
 import com.sg.flooringmastery.dto.Tax;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Component;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -32,6 +30,11 @@ public class FlooringDaoImpl implements FlooringDao{
     private Integer orderNumberTracker = 0;
 
     private final String DATA_FOLDER;
+    private final static String ORDER_HEADER =
+            "OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total";
+    private final static String PRODUCT_HEADER = "ProductType,CostPerSquareFoot,LaborCostPerSquareFoot";
+    private final static String TAX_HEADER = "State,StateName,TaxRate";
+    private final static String DELIMITER = ",";
     private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MMddyyyy");
 
     /**
@@ -137,9 +140,8 @@ public class FlooringDaoImpl implements FlooringDao{
     /**
      * Reads the order data from the order_MMDDYYYY.txt files in order to
      * populate the OrderMap.
-     * @return true if success, false if failure
      */
-    private boolean readOrderData() {
+    private void readOrderData() {
         try {
             File dir = new File(DATA_FOLDER + "/orders");
 
@@ -172,7 +174,7 @@ public class FlooringDaoImpl implements FlooringDao{
 
                     // While we have more lines in the file
                     while (sc.hasNextLine()) {
-                        String[] tokens = sc.nextLine().split(","); // split on commas
+                        String[] tokens = sc.nextLine().split(DELIMITER); // split on commas
                         // 0OrderNumber,1CustomerName,2State,3TaxRate,4ProductType,5Area,6CostPerSquareFoot,7LaborCostPerSquareFoot,8MaterialCost,9LaborCost,10Tax,11Total
                         Order extractedOrder = new Order(
                                 Integer.parseInt(tokens[0]), // order number
@@ -199,14 +201,12 @@ public class FlooringDaoImpl implements FlooringDao{
         } catch (NullPointerException | FileNotFoundException e) {
             throw new FlooringPersistenceException("-_- Could not load order data into memory.", e);
         }
-        return true;
     }
 
     /**
      * Reads tax data from Taxes.txt.
-     * @return true if success false if failure
      */
-    private boolean readTaxData() {
+    private void readTaxData() {
         try {
             Scanner sc;
             sc = new Scanner(new BufferedReader(new FileReader(DATA_FOLDER + "/Taxes.txt")));
@@ -217,7 +217,7 @@ public class FlooringDaoImpl implements FlooringDao{
             sc.nextLine();
 
             while (sc.hasNextLine()) {
-                String[] tokens = sc.nextLine().split(",");
+                String[] tokens = sc.nextLine().split(DELIMITER);
                 // StateAbbr,StateName,TaxRate
                 Tax extractedTax = new Tax(tokens[0], // state abbr
                         tokens[1], // state name
@@ -230,17 +230,95 @@ public class FlooringDaoImpl implements FlooringDao{
         } catch (FileNotFoundException e) {
             throw new FlooringPersistenceException("-_- Could not load tax data into memory.", e);
         }
-        return true;
+    }
+
+    /**
+     * Reads product data from Products.txt
+     */
+    private void readProductData() {
+        try {
+            Scanner sc;
+            sc = new Scanner(new BufferedReader(new FileReader(DATA_FOLDER + "/Products.txt")));
+
+            // skip header
+            sc.nextLine();
+
+            while (sc.hasNextLine()) {
+                String[] tokens = sc.nextLine().split(DELIMITER);
+
+                // ProductType,CostPerSquareFoot,LaborCostPerSquareFoot
+                Product extractedProduct = new Product(
+                        tokens[0], // productType
+                        new BigDecimal(tokens[1]), // cost sq ft
+                        new BigDecimal(tokens[2]) // labor cost sq ft
+                );
+            }
+            sc.close();
+
+        } catch (FileNotFoundException e) {
+            throw new FlooringPersistenceException("-_- Could not load product data into memory.", e);
+        }
     }
 
     @Override
-    public boolean loadData() {
-        return false;
+    public void loadData() {
+        try {
+            readProductData();
+            readTaxData();
+            readOrderData();
+        } catch (FlooringPersistenceException e) {
+            throw new FlooringPersistenceException("Could not load data from files.", e);
+        }
+
     }
 
+    /**
+     * Writes current data to respective files.
+     * @return
+     */
     @Override
-    public boolean writeData() {
-        return false;
+    public void writeData() throws FlooringPersistenceException {
+        try {
+            File dir = new File(DATA_FOLDER + "/orders");
+
+            // because we're retaining similar files through iterations of the program
+            // it might be good practice to wipe directory and re-upload files
+            // each time so we don't have duplicate problems
+            // potential downside: data may be lost if there is a failure in between
+            // deleting and rewriting
+            for (File file : Objects.requireNonNull(dir.listFiles())) {
+                if (!file.delete()) {
+                    throw new FlooringPersistenceException("Could not delete file: " + file.getName());
+                }
+            }
+
+            // https://stackoverflow.com/questions/5242433/create-file-name-using-date-and-time
+            Map<LocalDate, PrintWriter> writers = new HashMap<>();
+
+            // go through all orders
+            for (Order order : orderMap.values()) {
+                LocalDate date = order.getDate();
+                // if file DNE
+                if (!writers.containsKey(date)) {
+                    File newFile = new File(
+                            DATA_FOLDER + "/orders/Orders_" + date.format(dateFormatter) + ".txt");
+                    writers.put(date, new PrintWriter(new FileWriter(newFile)));
+                    // add at top of file
+                    writers.get(date).println(ORDER_HEADER);
+                }
+                // write rest of data
+                writers.get(date).println(order);
+            }
+
+            // clean up all filewriters
+            for (PrintWriter printWriter : writers.values()) {
+                printWriter.flush();
+                printWriter.close();
+            }
+
+        } catch (IOException e) {
+            throw new FlooringPersistenceException("Error was encountered while writing order data to a file.", e);
+        }
     }
 
 }

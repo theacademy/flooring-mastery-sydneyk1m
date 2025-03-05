@@ -67,14 +67,12 @@ public interface FlooringDao {
 
     /**
      * Reads and loads data from existing file
-     * @return true if success, false if failure
      */
-    boolean loadData();
+    void loadData();
 
     /**
      * Writes data to file
-     * @return true if success, false if failure
      */
-    boolean writeData();
+    void writeData();
 
 }
