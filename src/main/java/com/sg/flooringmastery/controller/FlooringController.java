@@ -4,6 +4,7 @@ import com.sg.flooringmastery.dto.Order;
 import com.sg.flooringmastery.service.FlooringService;
 import com.sg.flooringmastery.view.FlooringView;
 import java.time.LocalDate;
+import java.util.Set;
 
 public class FlooringController {
 
@@ -68,8 +69,9 @@ public class FlooringController {
      */
     private void displayOrdersForDate() {
         LocalDate date = view.askForDate();
-        // get orders from orders from service
-        view.displayOrders(orders);
+        // get orders from service
+        Set<Order> ordersToDisplay = service.getOrdersByDate(date);
+        view.displayOrders(ordersToDisplay);
         // TODO: STOPPED HERE
     }
 

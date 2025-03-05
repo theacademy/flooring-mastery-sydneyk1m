@@ -21,7 +21,7 @@ public class FlooringServiceImpl implements FlooringService{
 
     @Override
     public Set<Order> getOrdersByDate(LocalDate date) {
-        return dao.getOrdersByDate();
+        return dao.getOrdersForDate(date);
     }
 
     @Override
