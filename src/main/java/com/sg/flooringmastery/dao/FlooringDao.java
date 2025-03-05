@@ -38,13 +38,6 @@ public interface FlooringDao {
 
     boolean removeOrder(Integer orderNumber);
 
-    /**
-     * Gets the Order object based off of an order number.
-     * @param orderNumber the order number we'd like to get existing information from
-     * @return the Order associated with the orderNumber
-     */
-    Order getOrderFromOrderNumber(Integer orderNumber);
-
     Product getProductFromProductType(String productType);
 
     /**
@@ -54,16 +47,34 @@ public interface FlooringDao {
      */
     Tax getTaxInfoFromAbbr(String stateAbbr);
 
+    /**
+     * Gets all acceptable state abbreviations.
+     * @return a set of all acceptable state abbrs
+     */
     Set<String> getAcceptableStates();
 
+    /**
+     * Gets all available products.
+     * @return a set of all available products
+     */
     Set<Product> getAvailableProducts();
 
+    /**
+     * Gets all existing order numbers.
+     * @return a set of all existing order numbers
+     */
     Set<Integer> getAllOrderNumbers();
 
-//    boolean removeOrder(Integer orderNumber);
+    /**
+     * Reads and loads data from existing file
+     * @return true if success, false if failure
+     */
+    boolean loadData();
 
-
-
-
+    /**
+     * Writes data to file
+     * @return true if success, false if failure
+     */
+    boolean writeData();
 
 }

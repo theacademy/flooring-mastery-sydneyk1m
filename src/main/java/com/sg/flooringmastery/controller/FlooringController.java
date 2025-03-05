@@ -4,14 +4,19 @@ import com.sg.flooringmastery.dao.FlooringPersistenceException;
 import com.sg.flooringmastery.dto.Order;
 import com.sg.flooringmastery.service.FlooringService;
 import com.sg.flooringmastery.view.FlooringView;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import java.time.LocalDate;
 import java.util.Set;
 
+@Component
 public class FlooringController {
 
     private FlooringView view;
     private FlooringService service;
 
+    @Autowired
     public FlooringController(FlooringView view, FlooringService service) {
         this.view = view;
         this.service = service;
@@ -144,6 +149,9 @@ public class FlooringController {
         }
     }
 
+    /**
+     * Exports all data.
+     */
     private void exportAllData() {
 
     }

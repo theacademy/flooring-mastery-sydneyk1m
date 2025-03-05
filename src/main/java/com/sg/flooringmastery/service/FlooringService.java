@@ -2,11 +2,13 @@ package com.sg.flooringmastery.service;
 
 import com.sg.flooringmastery.dto.Order;
 import com.sg.flooringmastery.dto.Product;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Set;
 
+@Component
 public interface FlooringService {
 
     /**
@@ -67,7 +69,15 @@ public interface FlooringService {
      */
     Set<String> getAcceptableStates();
 
+    /**
+     * Gets a set of all available products you can buy.
+     * @return a set of all available products
+     */
     Set<Product> getAvailableProducts();
 
+    /**
+     * Gets a set of all existing order numbers.
+     * @return a set of all existing order numbers
+     */
     Set<Integer> getAllOrderNumbers();
 }

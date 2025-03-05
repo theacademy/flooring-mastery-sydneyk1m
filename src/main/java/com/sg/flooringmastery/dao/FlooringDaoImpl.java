@@ -3,13 +3,21 @@ package com.sg.flooringmastery.dao;
 import com.sg.flooringmastery.dto.Order;
 import com.sg.flooringmastery.dto.Product;
 import com.sg.flooringmastery.dto.Tax;
+import org.springframework.stereotype.Component;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+@Component
 public class FlooringDaoImpl implements FlooringDao{
 
     // <OrderNumber, Order>
@@ -18,14 +26,26 @@ public class FlooringDaoImpl implements FlooringDao{
     // <product type (name), Product>
     private Map<Integer, Product> productMap;
 
-//    private Map<Integer, Tax> taxMap;
     // <State abbreviation, Tax information>
-
     private Map<String, Tax> taxMap;
     private Integer orderNumberTracker = 0;
 
+    private final String DATA_FOLDER;
+    private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MMddyyyy");
+
+    /**
+     * Default constructor.
+     */
     public FlooringDaoImpl() {
-        // read data stuff here
+        DATA_FOLDER = "/data"; // because we want to access many different files inside this folder
+    }
+
+    /**
+     * Constructor that takes in the data source folder.
+     * @param dataFolder the source folder
+     */
+    public FlooringDaoImpl(String dataFolder) {
+        DATA_FOLDER = dataFolder;
     }
 
     /**
@@ -94,10 +114,6 @@ public class FlooringDaoImpl implements FlooringDao{
         return productMap.get(productType);
     }
 
-    public Order getOrderFromOrderNumber(Integer orderNumber) {
-        return orderMap.get(orderNumber);
-    }
-
     @Override
     public Set<String> getAcceptableStates() {
         return taxMap.values().stream().map(Tax::getStateAbbr).collect(Collectors.toSet());
@@ -115,5 +131,82 @@ public class FlooringDaoImpl implements FlooringDao{
         return orderNumberSet;
     }
 
+    /****************** FILE I/O METHODS BELOW ******************/
+
+    /**
+     * Reads the order data from the order_MMDDYYYY.txt files in order to
+     * populate the OrderMap.
+     * @return true if success, false if failure
+     */
+    private boolean readOrderData() {
+        try {
+            File dir = new File(DATA_FOLDER + "/orders");
+
+            Scanner sc;
+            orderMap = new HashMap<>();
+
+            // iterate through each file in /orders
+            for (File file : Objects.requireNonNull(dir.listFiles())) {
+                if (file.getName().toLowerCase().endsWith(".txt") && file.isFile()) {
+                    // initialize scanner
+
+                    sc = new Scanner(new BufferedReader(new FileReader(file)));
+
+                    // from stackoverflow please dont ask me about it. extracts date
+                    // https://stackoverflow.com/questions/40886116/how-to-extract-date-from-the-given-filename-in-java
+                    String regex = ".*(\\\\d{8})";
+                    Pattern pattern = Pattern.compile(regex);
+                    Matcher matcher = pattern.matcher(file.getName());
+
+                    String dateExtractedString = "";
+                    if (matcher.find()) {
+                        dateExtractedString = matcher.group(1);
+                    }
+                    LocalDate dateExtracted = LocalDate.parse(dateExtractedString, dateFormatter);
+                    sc.nextLine();
+
+                    // UNMARSHALLING HERE
+
+                    // While we have more lines in the file
+                    while (sc.hasNextLine()) {
+                        String[] tokens = sc.nextLine().split(","); // split on commas
+                        // 0OrderNumber,1CustomerName,2State,3TaxRate,4ProductType,5Area,6CostPerSquareFoot,7LaborCostPerSquareFoot,8MaterialCost,9LaborCost,10Tax,11Total
+                        Order extractedOrder = new Order(
+                                Integer.parseInt(tokens[0]), // order number
+                                tokens[1], // customer name
+                                taxMap.get(tokens[2]), // state abbr -> tax object
+                                productMap.get(tokens[4]), // product type -> product object
+                                new BigDecimal(tokens[5]), // area
+                                dateExtracted
+                        );
+
+                        // keep track of largest order number
+                        if (extractedOrder.getOrderNumber() > orderNumberTracker) {
+                            orderNumberTracker = extractedOrder.getOrderNumber();
+                        }
+
+                        // finally put order in orderMap
+                        orderMap.put(extractedOrder.getOrderNumber(), extractedOrder);
+
+                    }
+                    sc.close();
+                }
+            }
+
+        } catch (NullPointerException | FileNotFoundException e) {
+            throw new FlooringPersistenceException("-_- Could not load order data into memory.", e);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean loadData() {
+        return false;
+    }
+
+    @Override
+    public boolean writeData() {
+        return false;
+    }
 
 }

@@ -3,6 +3,8 @@ package com.sg.flooringmastery.view;
 import com.sg.flooringmastery.dao.FlooringPersistenceException;
 import com.sg.flooringmastery.dto.Order;
 import com.sg.flooringmastery.dto.Product;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -12,10 +14,12 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Component
 public class FlooringView {
 
     private UserIO io = new UserIOImpl();
 
+    @Autowired
     public FlooringView(UserIO io) {
         this.io = io;
     }

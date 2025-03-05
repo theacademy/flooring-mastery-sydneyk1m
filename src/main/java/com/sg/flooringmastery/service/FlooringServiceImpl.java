@@ -3,14 +3,18 @@ package com.sg.flooringmastery.service;
 import com.sg.flooringmastery.dao.FlooringDao;
 import com.sg.flooringmastery.dto.Order;
 import com.sg.flooringmastery.dto.Product;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Set;
 
+@Component
 public class FlooringServiceImpl implements FlooringService{
     private FlooringDao dao;
 
+    @Autowired
     /**
      * Constructor for service using FlooringDao input.
      * @param dao the dao

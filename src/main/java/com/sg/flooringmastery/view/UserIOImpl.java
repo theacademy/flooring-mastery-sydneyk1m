@@ -1,10 +1,13 @@
 package com.sg.flooringmastery.view;
 
+import org.springframework.stereotype.Component;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
+@Component
 public class UserIOImpl implements UserIO{
     Scanner sc = new Scanner(System.in);
     public int min;
