@@ -172,7 +172,13 @@ public class FlooringController {
      * Exports all data.
      */
     private void exportAllData() {
-        service.exportAllData();
+        try {
+            service.exportAllData();
+            view.displayExportSuccess();
+        } catch (Exception e) {
+            view.displayExportFailure();
+        }
+
     }
 
     /**

@@ -1,2 +1,3 @@
 OrderNumber;CustomerName;State;TaxRate;ProductType;Area;CostPerSquareFoot;LaborCostPerSquareFoot;MaterialCost;LaborCost;Tax;Total
 4;Java Java;TX;4.45;Tile;101.00;3.50;4.15;353.50;419.15;34.39;807.04
+6;My Test;KY;6.00;Laminate;102.00;1.75;2.10;178.50;214.20;23.57;416.27

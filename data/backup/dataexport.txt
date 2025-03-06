@@ -1,0 +1,6 @@
+OrderNumber;CustomerName;State;TaxRate;ProductType;Area;CostPerSquareFoot;LaborCostPerSquareFoot;MaterialCost;LaborCost;Tax;Total
+1;Ada Lovelace;CA;25.00;Tile;249.00;3.50;4.15;871.50;1033.35;476.22;2381.07;06012013
+3;Albert Einstein;KY;6.00;Carpet;217.00;2.25;2.10;488.25;455.70;56.64;1000.59;06022013
+4;Java Java;TX;4.45;Tile;101.00;3.50;4.15;353.50;419.15;34.39;807.04;03072025
+5;Acme, Inc.;OR;8.00;Laminate;103.00;1.75;2.10;180.25;216.30;31.73;428.28;08082026
+6;My Test;KY;6.00;Laminate;102.00;1.75;2.10;178.50;214.20;23.57;416.27;03072025

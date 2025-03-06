@@ -189,6 +189,20 @@ public class FlooringView {
     }
 
     /**
+     * Displays a note letting the user know that the export was a success.
+     */
+    public void displayExportSuccess() {
+        io.print("* * * EXPORT WAS A SUCCESS * * *\n");
+    }
+
+    /**
+     * Displays a note letting the user know that the export failed.
+     */
+    public void displayExportFailure() {
+        io.print("* * * EXPORT FAILED * * *\n");
+    }
+
+    /**
      * Displays a note letting the user know they have just entered an unknown command.
      */
     public void displayUnknownCommandBanner() {
@@ -406,6 +420,12 @@ public class FlooringView {
     }
 
     /********* EDITING METHODS PAST THIS POINT *********/
+
+    /**
+     * Asks for the edited customer name.
+     * @param oldName the old name
+     * @return the new customer name
+     */
     public String askForEditedCustomerName(String oldName) {
         while (true) {
             String newName = io.readString("Enter the customer name (" + oldName + "): ");
@@ -423,7 +443,12 @@ public class FlooringView {
         }
     }
 
-
+    /**
+     * Asks for edited state abbreviation.
+     * @param acceptableStates list of acceptable states
+     * @param oldOrderStateAbbr the old state abbr
+     * @return the new state abbreviation
+     */
     public String askForEditedStateAbbr(Set<String> acceptableStates, String oldOrderStateAbbr) {
         io.print("Here are the valid states we ship to: " + acceptableStates);
 
@@ -443,6 +468,12 @@ public class FlooringView {
         }
     }
 
+    /**
+     * Ask for edited product type.
+     * @param availableProducts list of available products
+     * @param oldProductType old product
+     * @return the new product type
+     */
     public String askForEditedProductType(Set<Product> availableProducts, String oldProductType) {
         String newProductType;
 
@@ -468,6 +499,11 @@ public class FlooringView {
         }
     }
 
+    /**
+     * Ask for edited area.
+     * @param oldArea the old area
+     * @return the new area
+     */
     public BigDecimal askForEditedArea(BigDecimal oldArea) {
         String newAreaString;
         BigDecimal hundred = new BigDecimal("100");

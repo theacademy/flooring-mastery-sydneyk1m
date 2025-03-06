@@ -121,7 +121,7 @@ public class FlooringServiceImpl implements FlooringService{
 
     @Override
     public void exportAllData() {
-        return dao.exportData();
+        dao.exportData();
     }
 
 }
