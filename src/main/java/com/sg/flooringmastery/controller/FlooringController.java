@@ -132,21 +132,32 @@ public class FlooringController {
      * Edits an existing order.
      */
     private void editOrder() {
-        view.displayEditOrderBanner();
-        Integer orderNum = view.askForOrderNumber(service.getAllOrderNumbers());
-        Order oldOrder = service.getOrder(orderNum);
-        Order newOrder = service.editOrder(
-                view.askForOrderNumber(service.getAllOrderNumbers()),
-                view.askForEditedCustomerName(oldOrder.getCustomerName()),
-                view.askForEditedStateAbbr(service.getAcceptableStates(), oldOrder.getTaxInfo().getStateAbbr()),
-                view.askForEditedProductType(service.getAvailableProducts(), oldOrder.getProduct().getProductType()),
-                view.askForEditedArea(oldOrder.getArea())
-        );
-        // Ask if they'd like to confirm editing the order
-        if (view.editOrderConfirmation(newOrder)) {
-            view.displaySuccessfulEdit(orderNum);
-        } else {
-            view.displayFailedEdit(orderNum);
+        while (true) {
+
+            view.displayEditOrderBanner();
+            Integer orderNum = view.askForOrderNumber(service.getAllOrderNumbers());
+            Order oldOrder = service.getOrder(orderNum);
+
+            try {
+                Order newOrder = service.editOrder(
+                        orderNum,
+                        view.askForEditedCustomerName(oldOrder.getCustomerName()),
+                        view.askForEditedStateAbbr(service.getAcceptableStates(), oldOrder.getTaxInfo().getStateAbbr()),
+                        view.askForEditedProductType(service.getAvailableProducts(), oldOrder.getProduct().getProductType()),
+                        view.askForEditedArea(oldOrder.getArea())
+                );
+
+                // Ask if they'd like to confirm editing the order
+                if (view.editOrderConfirmation(newOrder)) {
+                    service.replaceOrder(newOrder);
+                    view.displaySuccessfulEdit(orderNum);
+                } else {
+                    view.displayFailedEdit(orderNum);
+                }
+                break;
+            } catch (NullPointerException e) {
+                view.displayErrorMessage("That's not a valid order number.");
+            }
         }
     }
 
@@ -154,16 +165,26 @@ public class FlooringController {
      * Removes an order.
      */
     private void removeOrder() {
-        view.displayRemoveOrderBanner();
-        Order removeMe = service.getOrder(view.askForOrderNumber(service.getAllOrderNumbers()));
-        Integer removedOrderNum = removeMe.getOrderNumber();
+        while (true) {
 
-        if (view.removeOrderConfirmation(removeMe)) {
+            view.displayRemoveOrderBanner();
+
             try {
-                service.removeOrder(removeMe);
-                view.displaySuccessfulRemove();
-            } catch (InvalidOrderException e) {
-                view.displayFailedRemove(removedOrderNum);
+
+                Order removeMe = service.getOrder(view.askForOrderNumber(service.getAllOrderNumbers()));
+                Integer removedOrderNum = removeMe.getOrderNumber();
+
+                if (view.removeOrderConfirmation(removeMe)) {
+                    try {
+                        service.removeOrder(removeMe);
+                        view.displaySuccessfulRemove();
+                    } catch (InvalidOrderException e) {
+                        view.displayFailedRemove(removedOrderNum);
+                    }
+                }
+                break;
+            } catch (NullPointerException e) {
+                view.displayErrorMessage("That's not a valid order number.");
             }
         }
     }

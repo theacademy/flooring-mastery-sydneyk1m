@@ -509,7 +509,7 @@ public class FlooringView {
         BigDecimal hundred = new BigDecimal("100");
 
         while (true) {
-            newAreaString = io.readString("Enter the desired area to order (" + oldArea.toString() + "sq. ft): ");
+            newAreaString = io.readString("Enter the desired area to order (" + oldArea.toString() + " sq. ft): ");
 
             if (newAreaString.isBlank()) { // newline equals give the old area
                 return oldArea;
