@@ -11,6 +11,10 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.util.Set;
 
+/**
+ * The "Controller" component of the 3-tiered MVC flooring program architecture.
+ * This layer coordinates all other layers to ensure that the program is run smoothly and correctly.
+ */
 @Component
 public class FlooringController {
 

@@ -1,6 +1,7 @@
 package com.sg.flooringmastery.view;
 
 import com.sg.flooringmastery.dao.FlooringPersistenceException;
+import com.sg.flooringmastery.dao.InvalidOrderException;
 import com.sg.flooringmastery.dto.Order;
 import com.sg.flooringmastery.dto.Product;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,39 +15,58 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * The "View" component of the 3-tiered MVC flooring program architecture.
+ */
 @Component
 public class FlooringView {
 
     private UserIO io = new UserIOImpl();
     private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 
+    /**
+     * A constructor for FlooringView that takes in an io object.
+     * @param io the io
+     */
     @Autowired
     public FlooringView(UserIO io) {
         this.io = io;
     }
 
     /**
-     * Displays a welcome banner to be shown every time the menu
-     * is shown.
+     * Displays a welcome banner to be shown every time the menu is shown.
      */
     public void displayWelcomeBanner() {
         io.print("\n* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ");
         io.print("* * * * * * * * *  WELCOME TO THE FLOORING PROGRAM  * * * * * * * * *");
     }
 
+    /**
+     * Displays a banner to be shown every time the user wants to add a new order.
+     */
     public void displayAddOrderBanner() {
-        io.print("* * * ADDING NEW ORDER * * *\n");
+        io.print("* * * * * * * * * * * * *  ADDING NEW ORDER  * * * * * * * * * * * * * \n");
     }
 
+    /**
+     * Displays a banner to be shown every time the user wants to edit an order.
+     */
     public void displayEditOrderBanner() {
-        io.print("* * * EDITING ORDER * * *");
-        io.print("* NOTE: IF YOU'D LIKE TO KEEP EXISTING VALUES, SIMPLY PRESS ENTER WHEN PROMPTED FOR A VALUE * \n");
+        io.print("* * * * * * * * * * * * * * EDITING ORDER * * * * * * * * * * * * * *");
+        io.print("* * NOTE: TO KEEP EXISTING VALUES, JUST PRESS ENTER WHEN PROMPTED * *\n");
     }
 
+    /**
+     * Displays a banner to be shown every time the user wants to remove an order.
+     */
     public void displayRemoveOrderBanner() {
-        io.print("* * * REMOVING ORDER * * *\n");
+        io.print("* * * * * * * * * * * * *  REMOVING ORDER  * * * * * * * * * * * * *");
     }
 
+    /**
+     * Displays the start-up menu.
+     * @return
+     */
     public int displayMenu() {
         io.print("<<FLOORING PROGRAM>>");
         io.print("1. DISPLAY ORDERS");
@@ -87,7 +107,7 @@ public class FlooringView {
                     displayMe.getProduct().getProductType(), displayMe.getArea(), displayMe.getMaterialCost(),
                     displayMe.getLaborCost(), displayMe.getTax(), displayMe.getTotalCost());
         } catch (NullPointerException e) {
-//            throw new NullPointerException("ERROR: One or more values in your data is null.");
+            throw new NullPointerException("ERROR: One or more values in your data is null.");
         }
 
 
@@ -99,14 +119,26 @@ public class FlooringView {
      */
     public void displayOrders(Set<Order> orders) {
 
+        io.print("* * * * * * * * * *  ALL ORDERS FOR SELECTED DATE  * * * * * * * * * *");
+
         if (orders == null || orders.isEmpty()) {
-            io.print("No orders were found for the selected date.\n");
+            io.print("No orders were found for the selected date.");
             return;
         }
 
-        for (Order order : orders) {
-            displayOrder(order);
+        try {
+            for (Order order : orders) {
+                displayOrder(order);
+            }
+        } catch (Exception e) {
+            io.print("No orders were found for the selected date.");
+            throw new InvalidOrderException("No orders were found for the selected date.");
         }
+
+
+
+
+
     }
 
     /**
@@ -114,37 +146,60 @@ public class FlooringView {
      * @param customerName the customer's name
      */
     public void displaySuccessfulOrder(String customerName) {
-        io.print("* * * ORDER SUCCESSFULLY PLACED FOR " +  customerName.toUpperCase() + " * * *\n");
+        io.print("* * * * * * ORDER SUCCESSFULLY PLACED FOR " +  customerName.toUpperCase() + " * * * * * *\n");
     }
 
+    /**
+     * Displays a note letting the user know the order (specified) was placed successfully.
+     * @param editedOrderNumber the order number that was edited
+     */
     public void displaySuccessfulEdit(Integer editedOrderNumber) {
-        io.print("* * * ORDER #" + editedOrderNumber + " WAS SUCCESSFULLY EDITED * * *\n");
+        io.print("* * * * * * ORDER #" + editedOrderNumber + " WAS SUCCESSFULLY EDITED * * * * * *\n");
     }
 
     /**
      * Displays a note letting the user know their order failed.
      */
     public void displayFailedOrder() {
-        io.print("* * * ORDER FAILED. PLEASE TRY AGAIN. * * *\n");
+        io.print("* * * * * * * * *  ORDER FAILED. PLEASE TRY AGAIN.  * * * * * * * * *\n");
     }
 
+    /**
+     * Displays a note letting the user know their edit failed.
+     * @param failedOrderNum the order num that failed.
+     */
     public void displayFailedEdit(Integer failedOrderNum) {
-        io.print("* * * ORDER #" + failedOrderNum + " WAS NOT EDITED. TRY AGAIN. * * *\n");
+        io.print("* * * * * * ORDER #" + failedOrderNum + " WAS NOT EDITED. TRY AGAIN. * * * * * *\n");
     }
 
+    /**
+     * Displays a note letting the user know that their desired order was successfully removed.
+     */
     public void displaySuccessfulRemove() {
         io.print("* * * ORDER WAS SUCCESSFULLY REMOVED * * *\n");
     }
 
+    /**
+     * Displays a note letting the user know that their desired order was NOT removed and remains
+     * in the system.
+     * @param failedOrderNum the order that was not deleted
+     */
     public void displayFailedRemove(Integer failedOrderNum) {
         io.print("* * * ORDER #" + failedOrderNum + " WAS NOT REMOVED. TRY AGAIN. * * *\n");
     }
 
+    /**
+     * Displays a note letting the user know they have just entered an unknown command.
+     */
     public void displayUnknownCommandBanner() {
         io.print("* * * UNKNOWN COMMAND DETECTED * * *\n");
     }
 
+    /**
+     * Displays an exit banner.
+     */
     public void displayExitBanner() {
+
         io.print("* * * EXITING THE PROGRAM. COME BACK SOON! * * *\n");
     }
 

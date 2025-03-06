@@ -8,6 +8,9 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.util.Set;
 
+/**
+ * An interface for the flooring DAO. This DAO
+ */
 public interface FlooringDao {
 
     /**
