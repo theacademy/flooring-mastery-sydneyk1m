@@ -32,7 +32,6 @@ public class FlooringServiceImpl implements FlooringService{
     @Override
     public void addOrder(Order order) {
         try {
-            System.out.println("DEBUG - SERVICE LAYER ADDORDER() BEFORE DAO CALL "+ order);
             // set order number right before adding to the orderMap
             order.setOrderNumber(dao.getNextOrderNumber());
             dao.addOrder(order);
@@ -82,7 +81,7 @@ public class FlooringServiceImpl implements FlooringService{
     }
 
     @Override
-    public void replacedOrder(Order order) {
+    public void replaceOrder(Order order) {
         try {
             dao.addOrder(order);
         } catch (FlooringPersistenceException e) {

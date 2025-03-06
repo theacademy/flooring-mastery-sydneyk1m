@@ -2,7 +2,6 @@ package com.sg.flooringmastery.service;
 
 import com.sg.flooringmastery.dto.Order;
 import com.sg.flooringmastery.dto.Product;
-import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -50,7 +49,7 @@ public interface FlooringService {
      * Replaces/updates the existing order.
      * @param order
      */
-    void replacedOrder(Order order);
+    void replaceOrder(Order order);
 
     /**
      * Removes an order.
