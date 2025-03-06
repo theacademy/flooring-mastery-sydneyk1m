@@ -79,4 +79,8 @@ public interface FlooringDao {
      */
     void writeData();
 
+    /**
+     * Exports all data.
+     */
+    void exportData();
 }

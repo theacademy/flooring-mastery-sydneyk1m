@@ -82,4 +82,6 @@ public interface FlooringService {
      * @return a set of all existing order numbers
      */
     Set<Integer> getAllOrderNumbers();
+
+    void exportAllData();
 }

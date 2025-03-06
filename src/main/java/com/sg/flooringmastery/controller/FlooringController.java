@@ -172,7 +172,7 @@ public class FlooringController {
      * Exports all data.
      */
     private void exportAllData() {
-
+        service.exportAllData();
     }
 
     /**

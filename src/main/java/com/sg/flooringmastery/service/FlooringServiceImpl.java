@@ -119,4 +119,9 @@ public class FlooringServiceImpl implements FlooringService{
         return dao.getAllOrderNumbers();
     }
 
+    @Override
+    public void exportAllData() {
+        return dao.exportData();
+    }
+
 }

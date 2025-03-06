@@ -338,4 +338,22 @@ public class FlooringDaoImpl implements FlooringDao{
         }
     }
 
+    /**
+     * Exports all data when prompted.
+     */
+    @Override
+    public void exportData() {
+        try {
+            PrintWriter writer = new PrintWriter(new FileWriter(DATA_FOLDER + "/backup/dataexport.txt"));
+            writer.println(ORDER_HEADER);
+            for (Order order : orderMap.values()) {
+                writer.println(order + DELIMITER + order.getDate().format(dateFormatter));
+                writer.flush();
+            }
+            writer.close();
+        } catch (IOException e) {
+            throw new FlooringPersistenceException("Unable to export data.", e);
+        }
+    }
+
 }
