@@ -19,6 +19,7 @@ public class FlooringServiceImpl implements FlooringService{
      * Constructor for service using FlooringDao input.
      * @param dao the dao
      */
+    @Autowired
     public FlooringServiceImpl(FlooringDao dao) {
         this.dao = dao;
     }

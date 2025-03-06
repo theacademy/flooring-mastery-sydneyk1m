@@ -57,7 +57,7 @@ public class Product {
      * @return cost per square foot.
      */
     public BigDecimal getLaborCostPerSquareFoot() {
-        return getLaborCostPerSquareFoot();
+        return laborCostPerSquareFoot;
     }
 
     /**

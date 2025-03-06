@@ -165,13 +165,15 @@ public class FlooringDaoImpl implements FlooringDao{
 
                     // from stackoverflow please dont ask me about it. extracts date
                     // https://stackoverflow.com/questions/40886116/how-to-extract-date-from-the-given-filename-in-java
-                    String regex = ".*(\\\\d{8})";
+                    String regex = ".*(\\d{8})";
                     Pattern pattern = Pattern.compile(regex);
                     Matcher matcher = pattern.matcher(file.getName());
 
                     String dateExtractedString = "";
                     if (matcher.find()) {
                         dateExtractedString = matcher.group(1);
+                    } else {
+                        throw new FlooringPersistenceException("Date was not found in the filename: " + file.getName());
                     }
                     LocalDate dateExtracted = LocalDate.parse(dateExtractedString, dateFormatter);
 
@@ -247,6 +249,8 @@ public class FlooringDaoImpl implements FlooringDao{
         try {
             Scanner sc;
             sc = new Scanner(new BufferedReader(new FileReader(DATA_FOLDER + "/Products.txt")));
+
+            productMap = new HashMap<>();
 
             // skip header
             sc.nextLine();

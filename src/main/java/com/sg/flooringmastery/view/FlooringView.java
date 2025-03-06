@@ -19,6 +19,7 @@ public class FlooringView {
 
     private UserIO io = new UserIOImpl();
 
+    @Autowired
     public FlooringView(UserIO io) {
         this.io = io;
     }
@@ -75,7 +76,7 @@ public class FlooringView {
         // tax $%.2f
         // total cost $%.2f
 
-        io.printF("%s - %s %s : %s - %.0f sq ft\n $%.2f + $%.2f (+ $%.2f) = $%.2f\n",
+        io.printF("#%s - %s || %s || %s - %.0f sq ft\n    $%.2f material + $%.2f labor (+ $%.2f tax) = $%.2f\n",
                 orderNumber, displayMe.getCustomerName(), displayMe.getTaxInfo().getStateName(),
                 displayMe.getProduct().getProductType(), displayMe.getArea(), displayMe.getMaterialCost(),
                 displayMe.getLaborCost(), displayMe.getTax(), displayMe.getTotalCost());
@@ -103,7 +104,7 @@ public class FlooringView {
      * @param customerName the customer's name
      */
     public void displaySuccessfulOrder(String customerName) {
-        io.print("* * * ORDER SUCCESSFULLY PLACED FOR " +  customerName.toUpperCase() +"* * *");
+        io.print("* * * ORDER SUCCESSFULLY PLACED FOR " +  customerName.toUpperCase() + " * * *");
     }
 
     public void displaySuccessfulEdit(Integer editedOrderNumber) {
@@ -214,8 +215,8 @@ public class FlooringView {
         // display all available products and their pricing
         io.print("Here are all of our product options.");
         io.print("Products: " + availableProducts.stream().map(prod -> prod.getProductType() +
-                ": \n material cost: $" + prod.getCostPerSquareFoot() + "/square foot & labor cost: $" +
-                prod.getLaborCostPerSquareFoot() + "/square foot").collect(Collectors.joining(",", "[", "]")));
+                ": material cost: $" + prod.getCostPerSquareFoot() + "/square foot & labor cost: $" +
+                prod.getLaborCostPerSquareFoot() + "/square foot").collect(Collectors.joining(",", "\n[", "]")));
 
         while (true) {
             productType = io.readString("What product type would you like to select?");

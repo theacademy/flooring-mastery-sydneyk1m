@@ -17,11 +17,20 @@ public class FlooringController {
     private FlooringView view;
     private FlooringService service;
 
+    /**
+     * Constructor for a FlooringController.
+     * @param view the view
+     * @param service the service layer
+     */
+    @Autowired
     public FlooringController(FlooringView view, FlooringService service) {
         this.view = view;
         this.service = service;
     }
 
+    /**
+     * Executes the program.
+     */
     public void run() {
         boolean keepGoing = true;
         int menuSelection = 0;
