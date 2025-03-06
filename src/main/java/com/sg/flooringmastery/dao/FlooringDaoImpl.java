@@ -32,9 +32,9 @@ public class FlooringDaoImpl implements FlooringDao{
 
     private final String DATA_FOLDER;
     private final static String ORDER_HEADER =
-            "OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total";
-    private final static String PRODUCT_HEADER = "ProductType,CostPerSquareFoot,LaborCostPerSquareFoot";
-    private final static String TAX_HEADER = "State,StateName,TaxRate";
+            "OrderNumber;CustomerName;State;TaxRate;ProductType;Area;CostPerSquareFoot;LaborCostPerSquareFoot;MaterialCost;LaborCost;Tax;Total";
+    private final static String PRODUCT_HEADER = "ProductType;CostPerSquareFoot;LaborCostPerSquareFoot";
+    private final static String TAX_HEADER = "State;StateName;TaxRate";
     private final static String DELIMITER = ";";
     private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MMddyyyy");
 
