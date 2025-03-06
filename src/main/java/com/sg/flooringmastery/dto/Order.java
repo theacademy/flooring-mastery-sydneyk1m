@@ -2,6 +2,7 @@ package com.sg.flooringmastery.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Order {
     private Integer orderNumber;
@@ -170,8 +171,25 @@ public class Order {
     }
 
 
-
-
-
-
+    /**
+     * New CSV method because of order.toString() implicitly called in
+     * writeData() of flooringdaoimpl.
+     * @return a correctly formatted string for a CSV.
+     */
+    public String toCSVString() {
+        return String.format("%d,%s,%s,%.2f,%s,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%s",
+                orderNumber,
+                customerName,
+                state,
+                taxRate,
+                productName,
+                area,
+                costPerSquareFoot,
+                laborCostPerSquareFoot,
+                materialCost,
+                laborCost,
+                tax,
+                total,
+                date.format(DateTimeFormatter.ofPattern("MM-dd-yyyy")));
+    }
 }

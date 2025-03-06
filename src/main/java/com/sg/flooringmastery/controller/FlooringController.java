@@ -103,7 +103,7 @@ public class FlooringController {
                     view.askForStateAbbr(service.getAcceptableStates()),
                     view.askForProductType(service.getAvailableProducts()),
                     view.askForArea(),
-                    view.askForDate()
+                    view.askForFutureDate()
             );
 
             // If you would still like to place this order

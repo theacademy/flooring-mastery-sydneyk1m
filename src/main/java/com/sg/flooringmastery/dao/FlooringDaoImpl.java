@@ -84,7 +84,8 @@ public class FlooringDaoImpl implements FlooringDao{
      */
     @Override
     public Integer getNextOrderNumber() {
-        return orderNumberTracker++;
+        // pre increment?
+        return ++orderNumberTracker;
     }
 
     /**
@@ -95,6 +96,7 @@ public class FlooringDaoImpl implements FlooringDao{
     public void addOrder(Order order) {
         try {
             // does this add 1 to the order number regardless of success?
+            System.out.println("Adding order: " + order.toCSVString());
             orderMap.put(getNextOrderNumber(), order);
             writeData();
         } catch (FlooringPersistenceException e) {
@@ -289,7 +291,6 @@ public class FlooringDaoImpl implements FlooringDao{
 
     /**
      * Writes current data to respective files.
-     * @return
      */
     @Override
     public void writeData() throws FlooringPersistenceException {
@@ -322,7 +323,7 @@ public class FlooringDaoImpl implements FlooringDao{
                     writers.get(date).println(ORDER_HEADER);
                 }
                 // write rest of data
-                writers.get(date).println(order);
+                writers.get(date).println(order.toCSVString());
             }
 
             // clean up all filewriters

@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 public class FlooringView {
 
     private UserIO io = new UserIOImpl();
+    private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 
     @Autowired
     public FlooringView(UserIO io) {
@@ -29,21 +30,21 @@ public class FlooringView {
      * is shown.
      */
     public void displayWelcomeBanner() {
-        io.print("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ");
+        io.print("\n* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ");
         io.print("* * * * * * * * *  WELCOME TO THE FLOORING PROGRAM  * * * * * * * * *");
     }
 
     public void displayAddOrderBanner() {
-        io.print("* * * ADDING NEW ORDER * * *");
+        io.print("* * * ADDING NEW ORDER * * *\n");
     }
 
     public void displayEditOrderBanner() {
         io.print("* * * EDITING ORDER * * *");
-        io.print("* NOTE: IF YOU'D LIKE TO KEEP EXISTING VALUES, SIMPLY PRESS ENTER WHEN PROMPTED FOR A VALUE *");
+        io.print("* NOTE: IF YOU'D LIKE TO KEEP EXISTING VALUES, SIMPLY PRESS ENTER WHEN PROMPTED FOR A VALUE * \n");
     }
 
     public void displayRemoveOrderBanner() {
-        io.print("* * * REMOVING ORDER * * *");
+        io.print("* * * REMOVING ORDER * * *\n");
     }
 
     public int displayMenu() {
@@ -59,6 +60,10 @@ public class FlooringView {
 
     }
 
+    /**
+     * Displays a single order
+     * @param displayMe the order to be displayed.
+     */
     public void displayOrder(Order displayMe) {
         String orderNumber = "";
         if (displayMe.getOrderNumber() != null) {
@@ -75,11 +80,16 @@ public class FlooringView {
         // labor cost $%.2f
         // tax $%.2f
         // total cost $%.2f
+        try {
 
-        io.printF("#%s - %s || %s || %s - %.0f sq ft\n    $%.2f material + $%.2f labor (+ $%.2f tax) = $%.2f\n",
-                orderNumber, displayMe.getCustomerName(), displayMe.getTaxInfo().getStateName(),
-                displayMe.getProduct().getProductType(), displayMe.getArea(), displayMe.getMaterialCost(),
-                displayMe.getLaborCost(), displayMe.getTax(), displayMe.getTotalCost());
+            io.printF("#%s - %s || %s || %s - %.0f sq ft\n    $%.2f material + $%.2f labor (+ $%.2f tax) = $%.2f\n",
+                    orderNumber, displayMe.getCustomerName(), displayMe.getTaxInfo().getStateName(),
+                    displayMe.getProduct().getProductType(), displayMe.getArea(), displayMe.getMaterialCost(),
+                    displayMe.getLaborCost(), displayMe.getTax(), displayMe.getTotalCost());
+        } catch (NullPointerException e) {
+            throw new NullPointerException("ERROR: One or more values in your data is null.");
+        }
+
 
     }
 
@@ -104,38 +114,38 @@ public class FlooringView {
      * @param customerName the customer's name
      */
     public void displaySuccessfulOrder(String customerName) {
-        io.print("* * * ORDER SUCCESSFULLY PLACED FOR " +  customerName.toUpperCase() + " * * *");
+        io.print("* * * ORDER SUCCESSFULLY PLACED FOR " +  customerName.toUpperCase() + " * * *\n");
     }
 
     public void displaySuccessfulEdit(Integer editedOrderNumber) {
-        io.print("* * * ORDER #" + editedOrderNumber + " WAS SUCCESSFULLY EDITED * * *");
+        io.print("* * * ORDER #" + editedOrderNumber + " WAS SUCCESSFULLY EDITED * * *\n");
     }
 
     /**
      * Displays a note letting the user know their order failed.
      */
     public void displayFailedOrder() {
-        io.print("* * * ORDER FAILED. PLEASE TRY AGAIN. * * *");
+        io.print("* * * ORDER FAILED. PLEASE TRY AGAIN. * * *\n");
     }
 
     public void displayFailedEdit(Integer failedOrderNum) {
-        io.print("* * * ORDER #" + failedOrderNum + " WAS NOT EDITED. TRY AGAIN. * * *");
+        io.print("* * * ORDER #" + failedOrderNum + " WAS NOT EDITED. TRY AGAIN. * * *\n");
     }
 
     public void displaySuccessfulRemove() {
-        io.print("* * * ORDER WAS SUCCESSFULLY REMOVED * * *");
+        io.print("* * * ORDER WAS SUCCESSFULLY REMOVED * * *\n");
     }
 
     public void displayFailedRemove(Integer failedOrderNum) {
-        io.print("* * * ORDER #" + failedOrderNum + " WAS NOT REMOVED. TRY AGAIN. * * *");
+        io.print("* * * ORDER #" + failedOrderNum + " WAS NOT REMOVED. TRY AGAIN. * * *\n");
     }
 
     public void displayUnknownCommandBanner() {
-        io.print("* * * UNKNOWN COMMAND DETECTED * * *");
+        io.print("* * * UNKNOWN COMMAND DETECTED * * *\n");
     }
 
     public void displayExitBanner() {
-        io.print("* * * EXITING THE PROGRAM. COME BACK SOON! * * *");
+        io.print("* * * EXITING THE PROGRAM. COME BACK SOON! * * *\n");
     }
 
     /**
@@ -144,7 +154,7 @@ public class FlooringView {
      */
     public Integer askForOrderNumber(Set<Integer> existingOrderNumbers) {
         io.print("Here are all the existing order numbers: " + existingOrderNumbers);
-        return io.readInt("Which order number would you like to select?");
+        return io.readInt("\nWhich order number would you like to select?");
     }
 
     /**
@@ -199,6 +209,30 @@ public class FlooringView {
             try {
                 return io.readLocalDate("Enter the date in the format (MM/DD/YYYY).", DateTimeFormatter.ofPattern("MM/dd/yyyy"));
             } catch (DateTimeParseException e) {
+                io.print("That's not the correct format. Try again!\n");
+                // keep prompting for a correct format (even if order doesn't exist)
+            }
+        }
+
+    }
+
+    /**
+     * Prompts the user for a FUTURE date in the format (MM/DD/YYYY).
+     * @return the date, which must be in the future.
+     */
+    public LocalDate askForFutureDate() {
+        LocalDate rightNow = LocalDate.now();
+        while(true) {
+            try {
+                LocalDate futureDateCandidate = io.readLocalDate("Enter a future date in the format (MM/DD/YYYY).", DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+                if (futureDateCandidate.isAfter(rightNow)) {
+                    return futureDateCandidate;
+                } else {
+                    // just keep going
+                    io.print("The date must be in the future. Try again!");
+                }
+            } catch (DateTimeParseException e) {
+                io.print("That's not the correct format. Try again!\n");
                 // keep prompting for a correct format (even if order doesn't exist)
             }
         }
@@ -214,19 +248,20 @@ public class FlooringView {
 
         // display all available products and their pricing
         io.print("Here are all of our product options.");
-        io.print("Products: " + availableProducts.stream().map(prod -> prod.getProductType() +
+        io.print("Available Products: " + availableProducts.stream().map(prod -> prod.getProductType() +
                 ": material cost: $" + prod.getCostPerSquareFoot() + "/square foot & labor cost: $" +
-                prod.getLaborCostPerSquareFoot() + "/square foot").collect(Collectors.joining(",", "\n[", "]")));
+                prod.getLaborCostPerSquareFoot() + "/square foot").collect(Collectors.joining("\n", "\n", "\n")));
 
         while (true) {
-            productType = io.readString("What product type would you like to select?");
+            productType = io.readString("\nWhat product type would you like to select?");
             if (productType.isBlank()) {
                 return null;
             }
 
             for (Product product : availableProducts) {
                 // how to ignore case Lol
-                if (Objects.equals(product.getProductType(), productType)) { // should this be product and not product.getType?
+                // Objects.equals(product.getProductType(), productType
+                if (product.getProductType().equalsIgnoreCase(productType)) { // should this be product and not product.getType?
                     return productType;
                 }
             }
@@ -284,7 +319,7 @@ public class FlooringView {
 
         io.print("* * * EDITING ORDER IN PROGRESS * * *");
         displayOrder(editOrder);
-        String confirmation = io.readString("Still want to edit this order? (y/n)");
+        String confirmation = io.readString("Would you like to confirm these edits? (y/n)");
         return confirmation.equalsIgnoreCase("y");
     }
 
@@ -305,6 +340,10 @@ public class FlooringView {
         return confirmation.equalsIgnoreCase("y");
     }
 
+    /**
+     * Displays an error message
+     * @param message the error message
+     */
     public void displayErrorMessage(String message) {
         io.print("* * * AN ERROR HAS OCCURRED * * *");
         io.print(message);
@@ -354,19 +393,20 @@ public class FlooringView {
 
         // display all available products and their pricing
         io.print("Here are all of our product options.");
-        io.print("Products: " + availableProducts.stream().map(prod -> prod.getProductType() +
-                ": \n material cost: $" + prod.getCostPerSquareFoot() + "/square foot & labor cost: $" +
-                prod.getLaborCostPerSquareFoot() + "/square foot").collect(Collectors.joining(",", "[", "]")));
+        io.print("Available Products: " + availableProducts.stream().map(prod -> prod.getProductType() +
+                ": material cost: $" + prod.getCostPerSquareFoot() + "/square foot & labor cost: $" +
+                prod.getLaborCostPerSquareFoot() + "/square foot\n").collect(Collectors.joining("\n", "\n", "\n")));
 
         while (true) {
-            newProductType = io.readString("Enter the product type you'd like (" + oldProductType + "): ");
+            newProductType = io.readString("\nWhat product type would you like to select (" + oldProductType + ")?: ");
             if (newProductType.isBlank()) { // newline, we'd like to keep the old
                 return oldProductType;
             }
 
             for (Product product : availableProducts) {
                 // how to ignore case Lol
-                if (Objects.equals(product.getProductType(), newProductType)) { // should this be product and not product.getType?
+                //Objects.equals(product.getProductType(), newProductType
+                if (product.getProductType().equalsIgnoreCase(newProductType)) { // should this be product and not product.getType?
                     return newProductType;
                 }
             }
