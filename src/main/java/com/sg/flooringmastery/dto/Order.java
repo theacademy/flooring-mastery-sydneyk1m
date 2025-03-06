@@ -176,19 +176,19 @@ public class Order {
     /**
      * New toString() method because of order.toString() implicitly called in
      * writeData() of flooringdaoimpl.
-     * @return a correctly formatted string for a CSV.
+     * @return a correctly formatted string for the Orders_MMddyyyy.txt files.
      */
     public String toString() {
-        return orderNumber + "," +
-                customerName + "," +
-                taxInfo.getStateAbbr() + "," + taxInfo.getTaxRate() + "," +
-                product.getProductType() + "," +
-                area.setScale(2, UP) + "," +
-                product.getCostPerSquareFoot().setScale(2, UP) + "," +
-                product.getLaborCostPerSquareFoot().setScale(2, UP) + "," +
-                getMaterialCost().setScale(2, UP) + "," +
-                getLaborCost().setScale(2, UP) + "," +
-                getTax().setScale(2, UP) + "," +
+        return orderNumber + ";" +
+                customerName + ";" +
+                taxInfo.getStateAbbr() + ";" + taxInfo.getTaxRate() + ";" +
+                product.getProductType() + ";" +
+                area.setScale(2, UP) + ";" +
+                product.getCostPerSquareFoot().setScale(2, UP) + ";" +
+                product.getLaborCostPerSquareFoot().setScale(2, UP) + ";" +
+                getMaterialCost().setScale(2, UP) + ";" +
+                getLaborCost().setScale(2, UP) + ";" +
+                getTax().setScale(2, UP) + ";" +
                 getTotalCost().setScale(2, UP);
     }
 }

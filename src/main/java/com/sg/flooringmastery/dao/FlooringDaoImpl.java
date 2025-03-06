@@ -35,7 +35,7 @@ public class FlooringDaoImpl implements FlooringDao{
             "OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total";
     private final static String PRODUCT_HEADER = "ProductType,CostPerSquareFoot,LaborCostPerSquareFoot";
     private final static String TAX_HEADER = "State,StateName,TaxRate";
-    private final static String DELIMITER = ",";
+    private final static String DELIMITER = ";";
     private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MMddyyyy");
 
     /**
@@ -189,7 +189,7 @@ public class FlooringDaoImpl implements FlooringDao{
 
                     // While we have more lines in the file
                     while (sc.hasNextLine()) {
-                        String[] tokens = sc.nextLine().split(DELIMITER); // split on commas
+                        String[] tokens = sc.nextLine().split(DELIMITER); // split on SEMICOLONS
                         // 0OrderNumber,1CustomerName,2State,3TaxRate,4ProductType,5Area,6CostPerSquareFoot,7LaborCostPerSquareFoot,8MaterialCost,9LaborCost,10Tax,11Total
                         Order extractedOrder = new Order(
                                 Integer.parseInt(tokens[0]), // order number

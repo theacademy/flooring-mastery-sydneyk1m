@@ -170,7 +170,8 @@ public class FlooringView {
                 return null;
             }
 
-            if (name.matches("[A-z0-9,. ]+")) { // Check if valid
+            // "[A-z0-9,. ]+"
+            if (name.matches("[\\p{Alnum},.'\s]*")) { // Check if valid
                 return name;
             }
 
@@ -359,7 +360,7 @@ public class FlooringView {
                 return oldName;
             }
 
-            if (newName.matches("[A-z0-9,. ]+")) { // Check if valid
+            if (newName.matches("[\\p{Alnum},.'\s]*")) { // Check if valid
                 return newName;
             }
 
