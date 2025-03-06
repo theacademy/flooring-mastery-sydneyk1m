@@ -37,7 +37,7 @@ public class FlooringDaoImpl implements FlooringDao{
     private final static String TAX_HEADER = "State;StateName;TaxRate";
     private final static String DELIMITER = ";";
     private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MMddyyyy");
-    private DateTimeFormatter exportDateFormatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+//    private DateTimeFormatter exportDateFormatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
 
     /**
      * Default constructor.
@@ -318,7 +318,7 @@ public class FlooringDaoImpl implements FlooringDao{
                 // if file DNE
                 if (!writers.containsKey(date)) {
                     File newFile = new File(
-                            DATA_FOLDER + "/orders/Orders_" + date.format(exportDateFormatter) + ".txt");
+                            DATA_FOLDER + "/orders/Orders_" + date.format(dateFormatter) + ".txt");
                     writers.put(date, new PrintWriter(new FileWriter(newFile, true)));
                     // add at top of file
                     writers.get(date).println(ORDER_HEADER);
