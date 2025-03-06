@@ -96,8 +96,11 @@ public class FlooringDaoImpl implements FlooringDao{
     public void addOrder(Order order) {
         try {
             // does this add 1 to the order number regardless of success?
-            System.out.println("Adding order: " + order.toCSVString());
-            orderMap.put(getNextOrderNumber(), order);
+            Integer orderNum = getNextOrderNumber();
+            order.setOrderNumber(orderNum);
+            System.out.println("DEBUG - DAO ADDORDER() BEFORE STORING TO ORDERMAP " + order);
+            orderMap.put(orderNum, order);
+            System.out.println("DEBUG - DAO ADDORDER() AFTER STORING TO ORDERMAP " + order);
             writeData();
         } catch (FlooringPersistenceException e) {
             throw new FlooringPersistenceException("The order was unable to be added.", e);
@@ -318,12 +321,15 @@ public class FlooringDaoImpl implements FlooringDao{
                 if (!writers.containsKey(date)) {
                     File newFile = new File(
                             DATA_FOLDER + "/orders/Orders_" + date.format(dateFormatter) + ".txt");
-                    writers.put(date, new PrintWriter(new FileWriter(newFile)));
+                    writers.put(date, new PrintWriter(new FileWriter(newFile, true)));
                     // add at top of file
                     writers.get(date).println(ORDER_HEADER);
                 }
+                System.out.println("DEBUG - DAO WRITEDATA() BEFORE WRITING ORDER: " + order + "\n");
                 // write rest of data
-                writers.get(date).println(order.toCSVString());
+                writers.get(date).println(order);
+
+                System.out.println("DEBUG - DAO WRITEDATA() AFTER WRITING ORDER: " + order + "\n");
             }
 
             // clean up all filewriters

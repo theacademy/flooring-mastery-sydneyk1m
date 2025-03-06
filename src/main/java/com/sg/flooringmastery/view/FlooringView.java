@@ -87,7 +87,7 @@ public class FlooringView {
                     displayMe.getProduct().getProductType(), displayMe.getArea(), displayMe.getMaterialCost(),
                     displayMe.getLaborCost(), displayMe.getTax(), displayMe.getTotalCost());
         } catch (NullPointerException e) {
-            throw new NullPointerException("ERROR: One or more values in your data is null.");
+//            throw new NullPointerException("ERROR: One or more values in your data is null.");
         }
 
 
@@ -259,9 +259,8 @@ public class FlooringView {
             }
 
             for (Product product : availableProducts) {
-                // how to ignore case Lol
-                // Objects.equals(product.getProductType(), productType
-                if (product.getProductType().equalsIgnoreCase(productType)) { // should this be product and not product.getType?
+                // dont ignore case because it messes stuff up
+                if (Objects.equals(product.getProductType(), productType)) { // should this be product and not product.getType?
                     return productType;
                 }
             }

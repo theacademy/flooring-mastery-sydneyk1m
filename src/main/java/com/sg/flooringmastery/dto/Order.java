@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import static java.math.RoundingMode.UP;
+
 public class Order {
     private Integer orderNumber;
     private String customerName;
@@ -172,24 +174,21 @@ public class Order {
 
 
     /**
-     * New CSV method because of order.toString() implicitly called in
+     * New toString() method because of order.toString() implicitly called in
      * writeData() of flooringdaoimpl.
      * @return a correctly formatted string for a CSV.
      */
-    public String toCSVString() {
-        return String.format("%d,%s,%s,%.2f,%s,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%s",
-                orderNumber,
-                customerName,
-                state,
-                taxRate,
-                productName,
-                area,
-                costPerSquareFoot,
-                laborCostPerSquareFoot,
-                materialCost,
-                laborCost,
-                tax,
-                total,
-                date.format(DateTimeFormatter.ofPattern("MM-dd-yyyy")));
+    public String toString() {
+        return orderNumber + "," +
+                customerName + "," +
+                taxInfo.getStateAbbr() + "," + taxInfo.getTaxRate() + "," +
+                product.getProductType() + "," +
+                area.setScale(2, UP) + "," +
+                product.getCostPerSquareFoot().setScale(2, UP) + "," +
+                product.getLaborCostPerSquareFoot().setScale(2, UP) + "," +
+                getMaterialCost().setScale(2, UP) + "," +
+                getLaborCost().setScale(2, UP) + "," +
+                getTax().setScale(2, UP) + "," +
+                getTotalCost().setScale(2, UP);
     }
 }

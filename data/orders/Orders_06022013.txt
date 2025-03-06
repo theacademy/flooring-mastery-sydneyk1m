@@ -1,3 +1,3 @@
 OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total
-2,Doctor Who,null,nu,null,243.00,nu,nu,nu,nu,nu,nu,06-02-2013
-3,Albert Einstein,null,nu,null,217.00,nu,nu,nu,nu,nu,nu,06-02-2013
+2,Doctor Who,WA,20.00,Wood,243.00,5.15,4.75,1251.45,1154.25,481.14,2886.84
+3,Albert Einstein,KY,6.00,Carpet,217.00,2.25,2.10,488.25,455.70,56.64,1000.59

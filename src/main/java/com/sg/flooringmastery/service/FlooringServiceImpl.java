@@ -32,9 +32,11 @@ public class FlooringServiceImpl implements FlooringService{
     @Override
     public void addOrder(Order order) {
         try {
-            Order newOrder = new Order(dao.getNextOrderNumber(), order.getCustomerName(),
-                    order.getTaxInfo(), order.getProduct(), order.getArea(), order.getDate());
-            dao.addOrder(newOrder);
+            System.out.println("DEBUG - SERVICE LAYER ADDORDER() BEFORE DAO CALL "+ order);
+//            Order newOrder = new Order(dao.getNextOrderNumber(), order.getCustomerName(),
+//                    order.getTaxInfo(), order.getProduct(), order.getArea(), order.getDate());
+            order.setOrderNumber(dao.getNextOrderNumber());
+            dao.addOrder(order);
         } catch (FlooringPersistenceException e) {
             throw new FlooringPersistenceException("Unable to add this order.", e);
         }
