@@ -89,15 +89,14 @@ public class FlooringDaoImpl implements FlooringDao{
     }
 
     /**
-     * Adds the order.
+     * Adds the order to the .
      * @param order the order
      */
     @Override
     public void addOrder(Order order) {
         try {
-            // does this add 1 to the order number regardless of success?
-            Integer orderNum = getNextOrderNumber();
-            order.setOrderNumber(orderNum);
+            // we already set it back in the service
+            Integer orderNum = order.getOrderNumber();
             System.out.println("DEBUG - DAO ADDORDER() BEFORE STORING TO ORDERMAP " + order);
             orderMap.put(orderNum, order);
             System.out.println("DEBUG - DAO ADDORDER() AFTER STORING TO ORDERMAP " + order);

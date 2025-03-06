@@ -33,8 +33,7 @@ public class FlooringServiceImpl implements FlooringService{
     public void addOrder(Order order) {
         try {
             System.out.println("DEBUG - SERVICE LAYER ADDORDER() BEFORE DAO CALL "+ order);
-//            Order newOrder = new Order(dao.getNextOrderNumber(), order.getCustomerName(),
-//                    order.getTaxInfo(), order.getProduct(), order.getArea(), order.getDate());
+            // set order number right before adding to the orderMap
             order.setOrderNumber(dao.getNextOrderNumber());
             dao.addOrder(order);
         } catch (FlooringPersistenceException e) {
@@ -48,8 +47,8 @@ public class FlooringServiceImpl implements FlooringService{
             // none of these can be null. must reprompt
             return null;
         }
-        // should we set the next order number already here?
-        Order order = new Order(dao.getNextOrderNumber(), customerName, dao.getTaxInfoFromAbbr(stateAbbr), dao.getProductFromProductType(productType), area, date);
+        // do NOT set the order number here just yet.
+        Order order = new Order(null, customerName, dao.getTaxInfoFromAbbr(stateAbbr), dao.getProductFromProductType(productType), area, date);
         return order;
     }
 

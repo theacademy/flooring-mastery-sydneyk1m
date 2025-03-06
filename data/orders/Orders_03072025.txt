@@ -1,2 +1,2 @@
 OrderNumber;CustomerName;State;TaxRate;ProductType;Area;CostPerSquareFoot;LaborCostPerSquareFoot;MaterialCost;LaborCost;Tax;Total
-6;Java Java;TX;4.45;Tile;101.00;3.50;4.15;353.50;419.15;34.39;807.04
+4;Java Java;TX;4.45;Tile;101.00;3.50;4.15;353.50;419.15;34.39;807.04
