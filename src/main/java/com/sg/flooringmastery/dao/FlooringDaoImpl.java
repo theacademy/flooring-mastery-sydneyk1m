@@ -97,9 +97,7 @@ public class FlooringDaoImpl implements FlooringDao{
         try {
             // we already set it back in the service
             Integer orderNum = order.getOrderNumber();
-            System.out.println("DEBUG - DAO ADDORDER() BEFORE STORING TO ORDERMAP " + order);
             orderMap.put(orderNum, order);
-            System.out.println("DEBUG - DAO ADDORDER() AFTER STORING TO ORDERMAP " + order);
             writeData();
         } catch (FlooringPersistenceException e) {
             throw new FlooringPersistenceException("The order was unable to be added.", e);
@@ -324,11 +322,9 @@ public class FlooringDaoImpl implements FlooringDao{
                     // add at top of file
                     writers.get(date).println(ORDER_HEADER);
                 }
-                System.out.println("DEBUG - DAO WRITEDATA() BEFORE WRITING ORDER: " + order + "\n");
                 // write rest of data
                 writers.get(date).println(order);
 
-                System.out.println("DEBUG - DAO WRITEDATA() AFTER WRITING ORDER: " + order + "\n");
             }
 
             // clean up all filewriters
