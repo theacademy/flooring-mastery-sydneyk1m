@@ -37,7 +37,6 @@ public class FlooringDaoImpl implements FlooringDao{
     private final static String TAX_HEADER = "State;StateName;TaxRate";
     private final static String DELIMITER = ";";
     private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MMddyyyy");
-//    private DateTimeFormatter exportDateFormatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
 
     /**
      * Default constructor.
