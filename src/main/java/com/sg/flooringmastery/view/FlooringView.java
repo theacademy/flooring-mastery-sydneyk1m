@@ -134,11 +134,6 @@ public class FlooringView {
             io.print("No orders were found for the selected date.");
             throw new InvalidOrderException("No orders were found for the selected date.");
         }
-
-
-
-
-
     }
 
     /**
@@ -154,14 +149,14 @@ public class FlooringView {
      * @param editedOrderNumber the order number that was edited
      */
     public void displaySuccessfulEdit(Integer editedOrderNumber) {
-        io.print("* * * * * * ORDER #" + editedOrderNumber + " WAS SUCCESSFULLY EDITED * * * * * *\n");
+        io.print("* * * * * * ORDER #" + editedOrderNumber + " WAS SUCCESSFULLY EDITED * * * * * *");
     }
 
     /**
      * Displays a note letting the user know their order failed.
      */
     public void displayFailedOrder() {
-        io.print("* * * * * * * * *  ORDER FAILED. PLEASE TRY AGAIN.  * * * * * * * * *\n");
+        io.print("* * * * * * * * *  ORDER FAILED. PLEASE TRY AGAIN.  * * * * * * * * *");
     }
 
     /**
@@ -169,14 +164,14 @@ public class FlooringView {
      * @param failedOrderNum the order num that failed.
      */
     public void displayFailedEdit(Integer failedOrderNum) {
-        io.print("* * * * * * ORDER #" + failedOrderNum + " WAS NOT EDITED. TRY AGAIN. * * * * * *\n");
+        io.print("* * * * * * ORDER #" + failedOrderNum + " WAS NOT EDITED. TRY AGAIN. * * * * * *");
     }
 
     /**
      * Displays a note letting the user know that their desired order was successfully removed.
      */
     public void displaySuccessfulRemove() {
-        io.print("* * * ORDER WAS SUCCESSFULLY REMOVED * * *\n");
+        io.print("* * * * * * ORDER WAS SUCCESSFULLY REMOVED * * * * * *\n");
     }
 
     /**
@@ -185,14 +180,14 @@ public class FlooringView {
      * @param failedOrderNum the order that was not deleted
      */
     public void displayFailedRemove(Integer failedOrderNum) {
-        io.print("* * * ORDER #" + failedOrderNum + " WAS NOT REMOVED. TRY AGAIN. * * *\n");
+        io.print("* * * * * * ORDER #" + failedOrderNum + " WAS NOT REMOVED. TRY AGAIN. * * * * * *\n");
     }
 
     /**
      * Displays a note letting the user know that the export was a success.
      */
     public void displayExportSuccess() {
-        io.print("* * * EXPORT WAS A SUCCESS * * *\n");
+        io.print("* * * * * * * EXPORT WAS A SUCCESS * * * * * * *\n");
     }
 
     /**
@@ -222,10 +217,11 @@ public class FlooringView {
      * @return the order number
      */
     public Integer askForOrderNumber(Set<Integer> existingOrderNumbers) {
-        io.print("Here are all the existing order numbers: " + existingOrderNumbers);
+
         while (true) {
             try {
-                return io.readInt("\nWhich order number would you like to select?");
+                io.print("Here are all the existing order numbers: " + existingOrderNumbers);
+                return io.readInt("Which order number would you like to select?");
             } catch (NumberFormatException e) {
                 displayErrorMessage("That's not a number! try again.");
             }
