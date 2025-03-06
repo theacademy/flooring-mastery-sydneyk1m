@@ -223,7 +223,15 @@ public class FlooringView {
      */
     public Integer askForOrderNumber(Set<Integer> existingOrderNumbers) {
         io.print("Here are all the existing order numbers: " + existingOrderNumbers);
-        return io.readInt("\nWhich order number would you like to select?");
+        while (true) {
+            try {
+                return io.readInt("\nWhich order number would you like to select?");
+            } catch (NumberFormatException e) {
+                displayErrorMessage("That's not a number! try again.");
+            }
+        }
+
+
     }
 
     /**
@@ -244,7 +252,7 @@ public class FlooringView {
                 return name;
             }
 
-            io.print("Invalid input. Please try again and enter a valid name.");
+            displayErrorMessage("Invalid input. Please try again and enter a valid name.");
         }
     }
 
@@ -266,7 +274,7 @@ public class FlooringView {
                 return stateAbbr;
             }
 
-            io.print("The entered state is invalid. Please enter one within the valid list provided.");
+            displayErrorMessage("The entered state is invalid. Please enter one within the valid list provided.");
         }
     }
 
@@ -279,7 +287,7 @@ public class FlooringView {
             try {
                 return io.readLocalDate("Enter the date in the format (MM/DD/YYYY).", DateTimeFormatter.ofPattern("MM/dd/yyyy"));
             } catch (DateTimeParseException e) {
-                io.print("That's not the correct format. Try again!\n");
+                displayErrorMessage("That's not the correct format. Try again!");
                 // keep prompting for a correct format (even if order doesn't exist)
             }
         }
@@ -323,7 +331,7 @@ public class FlooringView {
                 prod.getLaborCostPerSquareFoot() + "/square foot").collect(Collectors.joining("\n", "\n", "\n")));
 
         while (true) {
-            productType = io.readString("\nWhat product type would you like to select?");
+            productType = io.readString("What product type would you like to select?");
             if (productType.isBlank()) {
                 return null;
             }

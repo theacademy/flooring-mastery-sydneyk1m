@@ -182,6 +182,7 @@ public class FlooringController {
                         view.displayFailedRemove(removedOrderNum);
                     }
                 }
+                view.displayFailedRemove(removedOrderNum);
                 break;
             } catch (NullPointerException e) {
                 view.displayErrorMessage("That's not a valid order number.");
