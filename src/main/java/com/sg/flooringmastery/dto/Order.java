@@ -3,6 +3,7 @@ package com.sg.flooringmastery.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 import static java.math.RoundingMode.UP;
 
@@ -190,5 +191,17 @@ public class Order {
                 getLaborCost().setScale(2, UP) + ";" +
                 getTax().setScale(2, UP) + ";" +
                 getTotalCost().setScale(2, UP);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Order order = (Order) o;
+        return Objects.equals(orderNumber, order.orderNumber) && Objects.equals(customerName, order.customerName) && Objects.equals(taxInfo, order.taxInfo) && Objects.equals(state, order.state) && Objects.equals(taxRate, order.taxRate) && Objects.equals(product, order.product) && Objects.equals(productName, order.productName) && Objects.equals(area, order.area) && Objects.equals(costPerSquareFoot, order.costPerSquareFoot) && Objects.equals(laborCostPerSquareFoot, order.laborCostPerSquareFoot) && Objects.equals(materialCost, order.materialCost) && Objects.equals(laborCost, order.laborCost) && Objects.equals(tax, order.tax) && Objects.equals(total, order.total) && Objects.equals(date, order.date);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(orderNumber, customerName, taxInfo, state, taxRate, product, productName, area, costPerSquareFoot, laborCostPerSquareFoot, materialCost, laborCost, tax, total, date);
     }
 }
