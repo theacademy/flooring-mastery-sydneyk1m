@@ -395,10 +395,10 @@ public class FlooringView {
         io.print("Here are all of our product options.");
         io.print("Available Products: " + availableProducts.stream().map(prod -> prod.getProductType() +
                 ": material cost: $" + prod.getCostPerSquareFoot() + "/square foot & labor cost: $" +
-                prod.getLaborCostPerSquareFoot() + "/square foot\n").collect(Collectors.joining("\n", "\n", "\n")));
+                prod.getLaborCostPerSquareFoot() + "/square foot").collect(Collectors.joining("\n", "\n", "\n")));
 
         while (true) {
-            newProductType = io.readString("\nWhat product type would you like to select (" + oldProductType + ")?: ");
+            newProductType = io.readString("What product type would you like to select (" + oldProductType + ")?: ");
             if (newProductType.isBlank()) { // newline, we'd like to keep the old
                 return oldProductType;
             }
@@ -418,7 +418,7 @@ public class FlooringView {
         BigDecimal hundred = new BigDecimal("100");
 
         while (true) {
-            newAreaString = io.readString("Enter the desired area to order (" + oldArea.toString() + "): ");
+            newAreaString = io.readString("Enter the desired area to order (" + oldArea.toString() + "sq. ft): ");
 
             if (newAreaString.isBlank()) { // newline equals give the old area
                 return oldArea;
