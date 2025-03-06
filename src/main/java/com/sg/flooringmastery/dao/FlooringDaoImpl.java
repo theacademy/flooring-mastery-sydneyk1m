@@ -345,7 +345,7 @@ public class FlooringDaoImpl implements FlooringDao{
     public void exportData() {
         try {
             PrintWriter writer = new PrintWriter(new FileWriter(DATA_FOLDER + "/backup/dataexport.txt"));
-            writer.println(ORDER_HEADER);
+            writer.println(ORDER_HEADER + ";Date");
             for (Order order : orderMap.values()) {
                 writer.println(order + DELIMITER + order.getDate().format(dateFormatter));
                 writer.flush();

@@ -131,7 +131,7 @@ public class FlooringView {
                 displayOrder(order);
             }
         } catch (Exception e) {
-            io.print("No orders were found for the selected date.");
+            displayErrorMessage("No orders were found for the selected date.");
             throw new InvalidOrderException("No orders were found for the selected date.");
         }
     }
