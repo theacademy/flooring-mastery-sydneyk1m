@@ -83,5 +83,8 @@ public interface FlooringService {
      */
     Set<Integer> getAllOrderNumbers();
 
+    /**
+     * Exports all data to a dataexport.txt file.
+     */
     void exportAllData();
 }

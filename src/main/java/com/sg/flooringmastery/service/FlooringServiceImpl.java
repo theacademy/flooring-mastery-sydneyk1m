@@ -11,6 +11,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Set;
 
+/**
+ * The Service layer, which handles all business logic.
+ */
 @Component
 public class FlooringServiceImpl implements FlooringService{
     private FlooringDao dao;
@@ -24,11 +27,20 @@ public class FlooringServiceImpl implements FlooringService{
         this.dao = dao;
     }
 
+    /**
+     * Returns a set of all orders from that date.
+     * @param date the specified date
+     * @return a set of all orders from that date.
+     */
     @Override
     public Set<Order> getOrdersByDate(LocalDate date) {
         return dao.getOrdersForDate(date);
     }
 
+    /**
+     * Adds a new order to the map.
+     * @param order the order to be added
+     */
     @Override
     public void addOrder(Order order) {
         try {
@@ -40,6 +52,15 @@ public class FlooringServiceImpl implements FlooringService{
         }
     }
 
+    /**
+     * Creates a new order.
+     * @param customerName the customer name
+     * @param stateAbbr the state abbreviation
+     * @param productType the product type
+     * @param area the area
+     * @param date the date (must be in the future)
+     * @return a new order
+     */
     @Override
     public Order createNewOrder(String customerName, String stateAbbr, String productType, BigDecimal area, LocalDate date) {
         if (customerName == null || stateAbbr == null || productType == null || area == null) {
@@ -58,7 +79,7 @@ public class FlooringServiceImpl implements FlooringService{
      * @param stateAbbreviation the state abbreviation
      * @param productType the product type
      * @param area the area ordered
-     * @return
+     * @return the newly edited order
      */
     @Override
     public Order editOrder(Integer orderNumber, String customerName, String stateAbbreviation, String productType, BigDecimal area) {
@@ -80,6 +101,10 @@ public class FlooringServiceImpl implements FlooringService{
         return newOrder;
     }
 
+    /**
+     * Replaces an order in the map (step 2).
+     * @param order the order to replace the old order with.
+     */
     @Override
     public void replaceOrder(Order order) {
         try {
@@ -90,6 +115,10 @@ public class FlooringServiceImpl implements FlooringService{
     }
 
 
+    /**
+     * Removes an order.
+     * @param order the order to be removed
+     */
     @Override
     public void removeOrder(Order order) {
         try {
@@ -99,26 +128,46 @@ public class FlooringServiceImpl implements FlooringService{
         }
     }
 
+    /**
+     * Returns an order associated with the order number
+     * @param orderNumber the order number
+     * @return the associated order
+     */
     @Override
     public Order getOrder(Integer orderNumber) {
         return dao.getOrder(orderNumber);
     }
 
+    /**
+     * Returns a set of all existing acceptable states.
+     * @return a set of all existing acceptable states
+     */
     @Override
     public Set<String> getAcceptableStates() {
         return dao.getAcceptableStates();
     }
 
+    /**
+     * Returns a set of all existing available products.
+     * @return a set of all existing available products
+     */
     @Override
     public Set<Product> getAvailableProducts() {
         return dao.getAvailableProducts();
     }
 
+    /**
+     * Returns a set of all existing order numbers.
+     * @return a set of all order numbers.
+     */
     @Override
     public Set<Integer> getAllOrderNumbers() {
         return dao.getAllOrderNumbers();
     }
 
+    /**
+     * Exports all data to a dataexport.txt file.
+     */
     @Override
     public void exportAllData() {
         dao.exportData();
