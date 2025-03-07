@@ -63,7 +63,11 @@ public class Tax {
         this.taxRate = taxRate;
     }
 
-
+    /**
+     * Overridden equals.
+     * @param o object
+     * @return true if equal false if not.
+     */
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -71,11 +75,19 @@ public class Tax {
         return Objects.equals(stateAbbr, tax.stateAbbr) && Objects.equals(stateName, tax.stateName) && Objects.equals(taxRate, tax.taxRate);
     }
 
+    /**
+     * overridden hashcode.
+     * @return
+     */
     @Override
     public int hashCode() {
         return Objects.hash(stateAbbr, stateName, taxRate);
     }
 
+    /**
+     * Overridden toString.
+     * @return to string.
+     */
     @Override
     public String toString() {
         return "Tax{" +

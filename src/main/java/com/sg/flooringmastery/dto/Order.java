@@ -193,6 +193,11 @@ public class Order {
                 getTotalCost().setScale(2, UP);
     }
 
+    /**
+     * Overridden equals operator.
+     * @param o object
+     * @return true if equal false if not
+     */
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -200,6 +205,10 @@ public class Order {
         return Objects.equals(orderNumber, order.orderNumber) && Objects.equals(customerName, order.customerName) && Objects.equals(taxInfo, order.taxInfo) && Objects.equals(state, order.state) && Objects.equals(taxRate, order.taxRate) && Objects.equals(product, order.product) && Objects.equals(productName, order.productName) && Objects.equals(area, order.area) && Objects.equals(costPerSquareFoot, order.costPerSquareFoot) && Objects.equals(laborCostPerSquareFoot, order.laborCostPerSquareFoot) && Objects.equals(materialCost, order.materialCost) && Objects.equals(laborCost, order.laborCost) && Objects.equals(tax, order.tax) && Objects.equals(total, order.total) && Objects.equals(date, order.date);
     }
 
+    /**
+     * Overridden hashCode.
+     * @return hashcode.
+     */
     @Override
     public int hashCode() {
         return Objects.hash(orderNumber, customerName, taxInfo, state, taxRate, product, productName, area, costPerSquareFoot, laborCostPerSquareFoot, materialCost, laborCost, tax, total, date);

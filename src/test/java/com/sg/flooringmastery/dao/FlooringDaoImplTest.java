@@ -93,7 +93,6 @@ public class FlooringDaoImplTest {
         assertEquals(expected, retrieved);
         assertTrue(expected.equals(retrieved));
 
-
     }
 
     @Test

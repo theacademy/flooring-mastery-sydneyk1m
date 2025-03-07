@@ -70,6 +70,11 @@ public class Product {
     }
 
 
+    /**
+     * Overridden equals.
+     * @param o object
+     * @return true if equals false if not.
+     */
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -77,11 +82,19 @@ public class Product {
         return Objects.equals(productType, product.productType) && Objects.equals(costPerSquareFoot, product.costPerSquareFoot) && Objects.equals(laborCostPerSquareFoot, product.laborCostPerSquareFoot);
     }
 
+    /**
+     * Overridden hashcode.
+     * @return hashcode
+     */
     @Override
     public int hashCode() {
         return Objects.hash(productType, costPerSquareFoot, laborCostPerSquareFoot);
     }
 
+    /**
+     * Overridden toString().
+     * @return to string
+     */
     @Override
     public String toString() {
         return "Product{" +
