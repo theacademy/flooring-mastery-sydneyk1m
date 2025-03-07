@@ -118,27 +118,49 @@ public class FlooringDaoImpl implements FlooringDao{
         }
     }
 
+    /**
+     * Gets the tax object from the state abbreviation.
+     * @param stateAbbr the state abbreviation
+     * @return the associated tax object
+     */
     @Override
     public Tax getTaxInfoFromAbbr(String stateAbbr) {
         return taxMap.get(stateAbbr);
     }
 
+    /**
+     * Gets the product object from the product type name.
+     * @param productType the product type
+     * @return the associated product object
+     */
     @Override
     public Product getProductFromProductType(String productType) {
         return productMap.get(productType);
     }
 
+    /**
+     * Gets a set of acceptable states
+     * @return a set of acceptable states
+     */
     @Override
     public Set<String> getAcceptableStates() {
         return taxMap.values().stream().map(Tax::getStateAbbr).collect(Collectors.toSet());
     }
 
+    /**
+     * Gets a set of available products
+     * @return a set of available products
+     */
     @Override
     public Set<Product> getAvailableProducts() {
         Set<Product> productSet = new HashSet<>(productMap.values());
         return productSet;
     }
 
+    /**
+     * Returns a set of all current order numbers.
+     * @return a set of all current order numbers
+     */
     @Override
     public Set<Integer> getAllOrderNumbers() {
         Set<Integer> orderNumberSet = new HashSet<>(orderMap.keySet());
@@ -165,12 +187,12 @@ public class FlooringDaoImpl implements FlooringDao{
 
                     sc = new Scanner(new BufferedReader(new FileReader(file)));
 
-                    // from stackoverflow please dont ask me about it. extracts date
-                    // https://stackoverflow.com/questions/40886116/how-to-extract-date-from-the-given-filename-in-java
+                    // extracts date
                     String regex = ".*(\\d{8})";
                     Pattern pattern = Pattern.compile(regex);
                     Matcher matcher = pattern.matcher(file.getName());
 
+                    // must set string to "" here to avoid error
                     String dateExtractedString = "";
                     if (matcher.find()) {
                         dateExtractedString = matcher.group(1);
@@ -187,6 +209,7 @@ public class FlooringDaoImpl implements FlooringDao{
                     // While we have more lines in the file
                     while (sc.hasNextLine()) {
                         String[] tokens = sc.nextLine().split(DELIMITER); // split on SEMICOLONS
+
                         // 0OrderNumber,1CustomerName,2State,3TaxRate,4ProductType,5Area,6CostPerSquareFoot,7LaborCostPerSquareFoot,8MaterialCost,9LaborCost,10Tax,11Total
                         Order extractedOrder = new Order(
                                 Integer.parseInt(tokens[0]), // order number
@@ -277,6 +300,9 @@ public class FlooringDaoImpl implements FlooringDao{
         }
     }
 
+    /**
+     * Loads data from a file.
+     */
     @Override
     public void loadData() {
         try {
@@ -308,7 +334,7 @@ public class FlooringDaoImpl implements FlooringDao{
                 }
             }
 
-            // https://stackoverflow.com/questions/5242433/create-file-name-using-date-and-time
+            // create map of date to writer to separate for each file (separated by date)
             Map<LocalDate, PrintWriter> writers = new HashMap<>();
 
             // go through all orders
@@ -319,7 +345,7 @@ public class FlooringDaoImpl implements FlooringDao{
                     File newFile = new File(
                             DATA_FOLDER + "/orders/Orders_" + date.format(dateFormatter) + ".txt");
                     writers.put(date, new PrintWriter(new FileWriter(newFile, true)));
-                    // add at top of file
+                    // add header at top of file
                     writers.get(date).println(ORDER_HEADER);
                 }
                 // write rest of data
