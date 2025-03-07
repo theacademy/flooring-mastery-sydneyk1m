@@ -1,0 +1,2 @@
+OrderNumber;CustomerName;State;TaxRate;ProductType;Area;CostPerSquareFoot;LaborCostPerSquareFoot;MaterialCost;LaborCost;Tax;Total
+8;Test Numm;OR;8.00;Rubber;102.00;2.10;3.50;214.20;357.00;45.70;616.90

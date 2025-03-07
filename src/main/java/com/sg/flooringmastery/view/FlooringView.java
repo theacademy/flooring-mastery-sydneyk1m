@@ -229,19 +229,25 @@ public class FlooringView {
      */
     public String askForCustomerName() {
         while (true) {
-            String name = io.readString("Enter the customer name: ");
+            try {
+                String name = io.readString("Enter the customer name: ");
 
-            // name cannot be NULL
-            if (name.isBlank()) {
-                return null;
+                // name cannot be NULL
+                if (name.isBlank() || name == null || name.equals("\n")) {
+                    displayErrorMessage("Customer name cannot be blank.");
+                    continue;
+                }
+
+                // "[A-z0-9,. ]+"
+                if (name.matches("[\\p{Alnum},.'\s]*")) { // Check if valid
+                    return name;
+                }
+                displayErrorMessage("Invalid input. Please try again and enter a valid name.");
+
+            } catch (Exception e) {
+                displayErrorMessage("Invalid input. Please try again and enter a valid name.");
             }
 
-            // "[A-z0-9,. ]+"
-            if (name.matches("[\\p{Alnum},.'\s]*")) { // Check if valid
-                return name;
-            }
-
-            displayErrorMessage("Invalid input. Please try again and enter a valid name.");
         }
     }
 
@@ -250,20 +256,26 @@ public class FlooringView {
      * @return the state name
      */
     public String askForStateAbbr(Set<String> acceptableStates) {
-        io.print("Here are the valid states we ship to: " + acceptableStates);
 
         while(true) {
-            String stateAbbr = io.readString("What is the state associated with this order?");
+            try {
+                io.print("Here are the valid states we ship to: " + acceptableStates);
+                String stateAbbr = io.readString("What is the state associated with this order?");
 
-            if (stateAbbr.isBlank()) { // cannot be null
-                return null;
+                if (stateAbbr.isBlank() || !stateAbbr.contains(stateAbbr)) { // cannot be null
+                    displayErrorMessage("Invalid input.");
+                    continue;
+                }
+
+                if (acceptableStates.contains(stateAbbr)) { // must be contained in tax file
+                    return stateAbbr;
+                }
+
+                displayErrorMessage("Please enter a state that we ship to.");
+
+            } catch (Exception e) {
+                displayErrorMessage("Invalid input.");
             }
-
-            if (acceptableStates.contains(stateAbbr)) { // must be contained in tax file
-                return stateAbbr;
-            }
-
-            displayErrorMessage("The entered state is invalid. Please enter one within the valid list provided.");
         }
     }
 
@@ -319,16 +331,23 @@ public class FlooringView {
                 prod.getLaborCostPerSquareFoot() + "/square foot").collect(Collectors.joining("\n", "\n", "\n")));
 
         while (true) {
-            productType = io.readString("What product type would you like to select?");
-            if (productType.isBlank()) {
-                return null;
-            }
-
-            for (Product product : availableProducts) {
-                // dont ignore case because it messes stuff up
-                if (Objects.equals(product.getProductType(), productType)) { // should this be product and not product.getType?
-                    return productType;
+            try {
+                productType = io.readString("What product type would you like to select?");
+                if (productType.isBlank() || productType == null) {
+                    displayErrorMessage("Please enter a valid product type.");
+                    continue;
                 }
+
+                for (Product product : availableProducts) {
+                    // don't ignore case because it messes stuff up
+                    if (Objects.equals(product.getProductType(), productType)) { // should this be product and not product.getType?
+                        return productType;
+                    }
+                }
+
+                displayErrorMessage("The selected product type is not available.");
+            } catch (Exception e) {
+                displayErrorMessage("Invalid input! try again.");
             }
         }
     }
@@ -342,15 +361,20 @@ public class FlooringView {
         BigDecimal hundred = new BigDecimal("100");
 
         while (true) {
-            areaString = io.readString("How many square feet would you like to buy?");
+            try {
+                areaString = io.readString("How many square feet would you like to buy?");
 
-            BigDecimal area = new BigDecimal(areaString);
+                BigDecimal area = new BigDecimal(areaString);
 
-            // if area reaches minimum, approve
-            if (area.compareTo(hundred) >= 0) {
-                return area;
+                // if area reaches minimum, approve
+                if (area.compareTo(hundred) >= 0) {
+                    return area;
+                }
+
+                io.print("You need to order at least 100 square feet. Try again!");
+            } catch (NumberFormatException e) {
+                displayErrorMessage("Tha'ts not a number! Try again!");
             }
-            io.print("You need to order at least 100 square feet. Try again!");
         }
     }
 
@@ -480,17 +504,23 @@ public class FlooringView {
                 prod.getLaborCostPerSquareFoot() + "/square foot").collect(Collectors.joining("\n", "\n", "\n")));
 
         while (true) {
-            newProductType = io.readString("What product type would you like to select (" + oldProductType + ")?: ");
-            if (newProductType.isBlank()) { // newline, we'd like to keep the old
-                return oldProductType;
-            }
-
-            for (Product product : availableProducts) {
-                // how to ignore case Lol
-                //Objects.equals(product.getProductType(), newProductType
-                if (product.getProductType().equalsIgnoreCase(newProductType)) { // should this be product and not product.getType?
-                    return newProductType;
+            try {
+                newProductType = io.readString("What product type would you like to select (" + oldProductType + ")?: ");
+                if (newProductType.isBlank()) { // newline, we'd like to keep the old
+                    return oldProductType;
                 }
+
+                for (Product product : availableProducts) {
+                    // how to ignore case Lol
+                    //Objects.equals(product.getProductType(), newProductType
+                    if (product.getProductType().equalsIgnoreCase(newProductType)) { // should this be product and not product.getType?
+                        return newProductType;
+                    }
+                }
+                displayErrorMessage("Not valid.");
+
+            } catch (Exception e) {
+                displayErrorMessage("Please enter a valid product or just press enter.");
             }
         }
     }
@@ -505,19 +535,24 @@ public class FlooringView {
         BigDecimal hundred = new BigDecimal("100");
 
         while (true) {
-            newAreaString = io.readString("Enter the desired area to order (" + oldArea.toString() + " sq. ft): ");
+            try {
+                newAreaString = io.readString("Enter the desired area to order (" + oldArea.toString() + " sq. ft): ");
 
-            if (newAreaString.isBlank()) { // newline equals give the old area
-                return oldArea;
+                if (newAreaString.isBlank()) { // newline equals give the old area
+                    return oldArea;
+                }
+
+                BigDecimal area = new BigDecimal(newAreaString);
+
+                // if area reaches minimum, approve
+                if (area.compareTo(hundred) >= 0) {
+                    return area;
+                }
+
+                displayErrorMessage("You need to order at least 100 square feet. Try again!");
+            } catch (NumberFormatException e) {
+                displayErrorMessage("Please enter a number.");
             }
-
-            BigDecimal area = new BigDecimal(newAreaString);
-
-            // if area reaches minimum, approve
-            if (area.compareTo(hundred) >= 0) {
-                return area;
-            }
-            io.print("You need to order at least 100 square feet. Try again!");
         }
     }
 }
