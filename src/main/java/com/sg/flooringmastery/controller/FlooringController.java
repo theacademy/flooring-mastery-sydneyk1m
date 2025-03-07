@@ -114,13 +114,11 @@ public class FlooringController {
             if (view.placeOrderConfirmation(newOrder)) {
                 try {
                     service.addOrder(newOrder);
-
                     // if it was successfully added
                     view.displaySuccessfulOrder(newOrder.getCustomerName());
 
                 } catch (InvalidOrderException e) {
                     view.displayFailedOrder();
-
                 }
             }
         } catch (InvalidOrderException e) {
@@ -170,7 +168,6 @@ public class FlooringController {
             view.displayRemoveOrderBanner();
 
             try {
-
                 Order removeMe = service.getOrder(view.askForOrderNumber(service.getAllOrderNumbers()));
                 Integer removedOrderNum = removeMe.getOrderNumber();
 
