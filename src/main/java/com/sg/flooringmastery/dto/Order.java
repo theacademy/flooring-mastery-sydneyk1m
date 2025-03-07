@@ -14,18 +14,19 @@ public class Order {
     private String customerName;
     private Tax taxInfo; // stateName can be derived from Tax obj
     private String state;
-    private BigDecimal taxRate;
     private Product product; // productName can be derived from Product obj
     private String productName;
     private BigDecimal area;
     private BigDecimal costPerSquareFoot;
+
     private BigDecimal laborCostPerSquareFoot;
+
     private BigDecimal materialCost;
+
     private BigDecimal laborCost;
     private BigDecimal tax;
-    private BigDecimal total;
+    private BigDecimal totalCost;
     private LocalDate date;
-
     /**
      * Constructs a new Order with assigned parameters.
      * @param orderNumber the order number
@@ -44,7 +45,6 @@ public class Order {
         this.area = area;
         this.date = date;
     }
-
     /**
      * Returns the order number.
      * @return the order number
@@ -142,11 +142,51 @@ public class Order {
     }
 
     /**
+     * Returns material cost per square foot
+     * @return mateiral cost per square foot
+     */
+    public BigDecimal getCostPerSquareFoot() {
+        return costPerSquareFoot;
+    }
+
+    /**
+     * Sets material cost per square foot
+     * @param costPerSquareFoot material cost per square foot
+     */
+    public void setCostPerSquareFoot(BigDecimal costPerSquareFoot) {
+        this.costPerSquareFoot = costPerSquareFoot;
+    }
+
+    /**
+     * Gets labor cost per square foot
+     * @return labor cost per square foot
+     */
+    public BigDecimal getLaborCostPerSquareFoot() {
+        return laborCostPerSquareFoot;
+    }
+
+    /**
+     * Sets labor cost per square foot
+     * @param laborCostPerSquareFoot labor cost per sq foot
+     */
+    public void setLaborCostPerSquareFoot(BigDecimal laborCostPerSquareFoot) {
+        this.laborCostPerSquareFoot = laborCostPerSquareFoot;
+    }
+
+    /**
+     * Sets material cost
+     * @param materialCost material cost
+     */
+    public void setMaterialCost(BigDecimal materialCost) {
+        this.materialCost = materialCost;
+    }
+
+    /**
      * Calculates and returns the cost of materials for the order.
      * @return the cost of materials for the order.
      */
     public BigDecimal getMaterialCost() {
-        return area.multiply(product.getCostPerSquareFoot());
+        return materialCost;
     }
 
     /**
@@ -154,7 +194,23 @@ public class Order {
      * @return the cost of labor for the order.
      */
     public BigDecimal getLaborCost() {
-        return area.multiply(product.getLaborCostPerSquareFoot());
+        return laborCost;
+    }
+
+    /**
+     * Sets labor cost
+     * @param laborCost labor cost
+     */
+    public void setLaborCost(BigDecimal laborCost) {
+        this.laborCost = laborCost;
+    }
+
+    /**
+     * Sets tax
+     * @param tax tax
+     */
+    public void setTax(BigDecimal tax) {
+        this.tax = tax;
     }
 
     /**
@@ -163,8 +219,7 @@ public class Order {
      * @return taxes incurred
      */
     public BigDecimal getTax() {
-        BigDecimal hundred = new BigDecimal("100");
-        return ((getMaterialCost().add(getLaborCost())).multiply(getTaxInfo().getTaxRate())).divide(hundred);
+        return tax;
     }
 
     /**
@@ -175,6 +230,13 @@ public class Order {
         return (getMaterialCost().add(getLaborCost())).add(getTax());
     }
 
+    /**
+     * Sets total cost
+     * @param totalCost total cost
+     */
+    public void setTotalCost(BigDecimal totalCost) {
+        this.totalCost = totalCost;
+    }
 
     /**
      * New toString() method because of order.toString() implicitly called in
@@ -204,7 +266,7 @@ public class Order {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
-        return Objects.equals(orderNumber, order.orderNumber) && Objects.equals(customerName, order.customerName) && Objects.equals(taxInfo, order.taxInfo) && Objects.equals(state, order.state) && Objects.equals(taxRate, order.taxRate) && Objects.equals(product, order.product) && Objects.equals(productName, order.productName) && Objects.equals(area, order.area) && Objects.equals(costPerSquareFoot, order.costPerSquareFoot) && Objects.equals(laborCostPerSquareFoot, order.laborCostPerSquareFoot) && Objects.equals(materialCost, order.materialCost) && Objects.equals(laborCost, order.laborCost) && Objects.equals(tax, order.tax) && Objects.equals(total, order.total) && Objects.equals(date, order.date);
+        return Objects.equals(orderNumber, order.orderNumber) && Objects.equals(customerName, order.customerName) && Objects.equals(taxInfo, order.taxInfo) && Objects.equals(state, order.state) && Objects.equals(product, order.product) && Objects.equals(productName, order.productName) && Objects.equals(area, order.area) && Objects.equals(costPerSquareFoot, order.costPerSquareFoot) && Objects.equals(laborCostPerSquareFoot, order.laborCostPerSquareFoot) && Objects.equals(materialCost, order.materialCost) && Objects.equals(laborCost, order.laborCost) && Objects.equals(tax, order.tax) && Objects.equals(totalCost, order.totalCost) && Objects.equals(date, order.date);
     }
 
     /**
@@ -213,6 +275,6 @@ public class Order {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(orderNumber, customerName, taxInfo, state, taxRate, product, productName, area, costPerSquareFoot, laborCostPerSquareFoot, materialCost, laborCost, tax, total, date);
+        return Objects.hash(orderNumber, customerName, taxInfo, state, product, productName, area, costPerSquareFoot, laborCostPerSquareFoot, materialCost, laborCost, tax, totalCost, date);
     }
 }

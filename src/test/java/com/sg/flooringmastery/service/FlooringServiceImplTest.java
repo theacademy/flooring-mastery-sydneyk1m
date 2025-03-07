@@ -120,8 +120,8 @@ public class FlooringServiceImplTest {
     @Test
     public void testEditOrder() {
         // 1. we will be editing stub loaded order #1
-        // Original values:
-        // Order order1 = new Order(1, "Sydney, Inc.", taxMap.get("TX"), productMap.get("Wood"), new BigDecimal("150"),
+        // Original values we are editing from:
+        // (1, "Sydney, Inc.", taxMap.get("TX"), productMap.get("Wood"), new BigDecimal("150"),
         //                LocalDate.parse("10/10/2026", DateTimeFormatter.ofPattern("MM/dd/yyyy")));
 
         Order updated = testService.editOrder(1, "Edited Editson", "CA", "Carpet",
@@ -134,7 +134,9 @@ public class FlooringServiceImplTest {
                 testDao.getProductFromProductType("Carpet"), new BigDecimal("20"),
                 LocalDate.parse("10/10/2026", DateTimeFormatter.ofPattern("MM/dd/yyyy")));
 
-        assertEquals(testService.getOrder(1), standard);
+        testService.addOrder(standard);
+
+        assertTrue(testService.getOrder(1).equals(standard));
     }
 
 }

@@ -4,6 +4,7 @@ import com.sg.flooringmastery.dao.FlooringDao;
 import com.sg.flooringmastery.dao.FlooringPersistenceException;
 import com.sg.flooringmastery.dto.Order;
 import com.sg.flooringmastery.dto.Product;
+import com.sg.flooringmastery.dto.Tax;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -69,6 +70,11 @@ public class FlooringServiceImpl implements FlooringService{
         }
         // do NOT set the order number here just yet.
         Order order = new Order(null, customerName, dao.getTaxInfoFromAbbr(stateAbbr), dao.getProductFromProductType(productType), area, date);
+        Product productInfo = dao.getProductFromProductType(productType);
+        order.setLaborCostPerSquareFoot(productInfo.getLaborCostPerSquareFoot());
+        order.setCostPerSquareFoot(productInfo.getCostPerSquareFoot());
+
+        calculateOrderCosts(order);
         return order;
     }
 
@@ -98,6 +104,14 @@ public class FlooringServiceImpl implements FlooringService{
                 area == null ? oldOrder.getArea() : area,
                 oldOrder.getDate()
         );
+
+        Product productInfo = newOrder.getProduct();
+        newOrder.setLaborCostPerSquareFoot(productInfo.getLaborCostPerSquareFoot());
+        newOrder.setCostPerSquareFoot(productInfo.getCostPerSquareFoot());
+
+        // CALCULATEORDERCOSTS
+        calculateOrderCosts(newOrder);
+
         return newOrder;
     }
 
@@ -171,6 +185,29 @@ public class FlooringServiceImpl implements FlooringService{
     @Override
     public void exportAllData() {
         dao.exportData();
+    }
+
+    /**
+     * Calculates and sets all costs.
+     * @param order order
+     */
+    @Override
+    public void calculateOrderCosts(Order order) {
+        BigDecimal hundred = new BigDecimal("100");
+        BigDecimal materialCost = order.getArea().multiply(order.getCostPerSquareFoot());
+        BigDecimal laborCost = order.getArea().multiply(order.getLaborCostPerSquareFoot());
+
+        order.setMaterialCost(materialCost);
+        order.setLaborCost(laborCost);
+
+        BigDecimal tax = ((order.getMaterialCost().add(order.getLaborCost()))
+                .multiply(order.getTaxInfo().getTaxRate())).divide(hundred);
+
+        order.setTax(tax);
+
+        BigDecimal totalCost = (order.getMaterialCost().add(order.getLaborCost())).add(order.getTax());
+        order.setTotalCost(totalCost);
+
     }
 
 }

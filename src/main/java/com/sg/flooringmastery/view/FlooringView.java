@@ -542,11 +542,11 @@ public class FlooringView {
                     return oldArea;
                 }
 
-                BigDecimal area = new BigDecimal(newAreaString);
+                BigDecimal newArea = new BigDecimal(newAreaString);
 
                 // if area reaches minimum, approve
-                if (area.compareTo(hundred) >= 0) {
-                    return area;
+                if (newArea.compareTo(hundred) >= 0) {
+                    return newArea;
                 }
 
                 displayErrorMessage("You need to order at least 100 square feet. Try again!");

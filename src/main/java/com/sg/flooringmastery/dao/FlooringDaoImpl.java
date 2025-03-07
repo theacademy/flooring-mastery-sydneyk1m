@@ -216,6 +216,13 @@ public class FlooringDaoImpl implements FlooringDao{
                                 new BigDecimal(tokens[5]), // area
                                 dateExtracted
                         );
+                        extractedOrder.setTax(new BigDecimal(tokens[3]));
+                        extractedOrder.setCostPerSquareFoot(new BigDecimal(tokens[6]));
+                        extractedOrder.setLaborCostPerSquareFoot(new BigDecimal(tokens[7]));
+                        extractedOrder.setMaterialCost(new BigDecimal(tokens[8]));
+                        extractedOrder.setLaborCost(new BigDecimal(tokens[9]));
+                        extractedOrder.setTax(new BigDecimal(tokens[10]));
+                        extractedOrder.setTotalCost(new BigDecimal(tokens[11]));
 
                         // keep track of largest order number
                         if (extractedOrder.getOrderNumber() > orderNumberTracker) {

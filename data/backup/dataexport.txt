@@ -1,7 +1,7 @@
 OrderNumber;CustomerName;State;TaxRate;ProductType;Area;CostPerSquareFoot;LaborCostPerSquareFoot;MaterialCost;LaborCost;Tax;Total;Date
 1;Ada Lovelace;CA;25.00;Tile;249.00;3.50;4.15;871.50;1033.35;476.22;2381.07;06012013
-3;Albert Einstein;KY;6.00;Carpet;217.00;2.25;2.10;488.25;455.70;56.64;1000.59;06022013
 5;Acme, Inc.;OR;8.00;Laminate;103.00;1.75;2.10;180.25;216.30;31.73;428.28;08082026
 6;My Awesome TEst;KY;6.00;Carpet;103.00;2.25;2.10;231.75;216.30;26.89;474.94;03072025
 7;Shooby Doobop;KY;6.00;Wood;104.00;5.15;4.75;535.60;494.00;61.78;1091.38;03072025
 8;Test Numm;OR;8.00;Rubber;102.00;2.10;3.50;214.20;357.00;45.70;616.90;10102025
+9;Test Service 3;OR;8.00;Tile;103.00;3.50;4.15;360.50;427.45;63.04;850.99;10102025

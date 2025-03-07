@@ -145,6 +145,9 @@ public class FlooringController {
                         view.askForEditedArea(oldOrder.getArea())
                 );
 
+                System.out.println(newOrder.getMaterialCost());
+
+
                 // Ask if they'd like to confirm editing the order
                 if (view.editOrderConfirmation(newOrder)) {
                     service.replaceOrder(newOrder);
@@ -175,6 +178,7 @@ public class FlooringController {
                     try {
                         service.removeOrder(removeMe);
                         view.displaySuccessfulRemove();
+                        break;
                     } catch (InvalidOrderException e) {
                         view.displayFailedRemove(removedOrderNum);
                     }

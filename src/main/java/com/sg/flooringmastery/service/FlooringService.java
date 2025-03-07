@@ -90,4 +90,10 @@ public interface FlooringService {
      * Exports all data to a dataexport.txt file.
      */
     void exportAllData();
+
+    /**
+     * Calculates and sets all costs.
+     */
+    void calculateOrderCosts(Order order);
+
 }
