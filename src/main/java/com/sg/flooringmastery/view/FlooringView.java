@@ -1,6 +1,5 @@
 package com.sg.flooringmastery.view;
 
-import com.sg.flooringmastery.dao.FlooringPersistenceException;
 import com.sg.flooringmastery.dao.InvalidOrderException;
 import com.sg.flooringmastery.dto.Order;
 import com.sg.flooringmastery.dto.Product;
@@ -101,7 +100,6 @@ public class FlooringView {
         // tax $%.2f
         // total cost $%.2f
         try {
-
             io.printF("#%s - %s || %s || %s - %.0f sq ft\n    $%.2f material + $%.2f labor (+ $%.2f tax) = $%.2f\n",
                     orderNumber, displayMe.getCustomerName(), displayMe.getTaxInfo().getStateName(),
                     displayMe.getProduct().getProductType(), displayMe.getArea(), displayMe.getMaterialCost(),
@@ -109,8 +107,6 @@ public class FlooringView {
         } catch (NullPointerException e) {
             throw new NullPointerException("ERROR: One or more values in your data is null.");
         }
-
-
     }
 
     /**
@@ -208,7 +204,6 @@ public class FlooringView {
      * Displays an exit banner.
      */
     public void displayExitBanner() {
-
         io.print("* * * EXITING THE PROGRAM. COME BACK SOON! * * *\n");
     }
 
@@ -226,8 +221,6 @@ public class FlooringView {
                 displayErrorMessage("That's not a number! try again.");
             }
         }
-
-
     }
 
     /**
@@ -310,7 +303,6 @@ public class FlooringView {
                 // keep prompting for a correct format (even if order doesn't exist)
             }
         }
-
     }
 
     /**
