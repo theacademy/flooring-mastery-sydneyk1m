@@ -7,6 +7,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Set;
 
+/**
+ * An interface for the service layer.
+ */
 public interface FlooringService {
 
     /**
