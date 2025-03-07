@@ -6,6 +6,9 @@ import java.util.Objects;
 
 import static java.math.RoundingMode.UP;
 
+/**
+ * A class representing an Order.
+ */
 public class Order {
     private Integer orderNumber;
     private String customerName;
