@@ -34,12 +34,15 @@ public interface FlooringDao {
     Integer getNextOrderNumber();
 
     /**
-     * Adds/edits an existing order.
+     * Adds an existing order.
      * @param order the order
-     * @return true if success, false if failure
      */
     void addOrder(Order order);
 
+    /**
+     * Removes an order.
+     * @param orderNumber the order number
+     */
     void removeOrder(Integer orderNumber);
 
     Product getProductFromProductType(String productType);
