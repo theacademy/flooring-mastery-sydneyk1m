@@ -1,11 +1,8 @@
 package com.sg.flooringmastery.dao;
 
-import com.sg.flooringmastery.controller.FlooringController;
 import com.sg.flooringmastery.dto.Order;
 import com.sg.flooringmastery.dto.Product;
 import com.sg.flooringmastery.dto.Tax;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
@@ -36,7 +33,7 @@ public class FlooringDaoImpl implements FlooringDao{
     private final static String PRODUCT_HEADER = "ProductType;CostPerSquareFoot;LaborCostPerSquareFoot";
     private final static String TAX_HEADER = "State;StateName;TaxRate";
     private final static String DELIMITER = ";";
-    private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MMddyyyy");
+    private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MMddyyyy");
 
     /**
      * Default constructor.
@@ -350,7 +347,6 @@ public class FlooringDaoImpl implements FlooringDao{
                 }
                 // write rest of data
                 writers.get(date).println(order);
-
             }
 
             // clean up all filewriters

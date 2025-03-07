@@ -3,7 +3,6 @@ package com.sg.flooringmastery.dao;
 import com.sg.flooringmastery.dto.Order;
 import com.sg.flooringmastery.dto.Product;
 import com.sg.flooringmastery.dto.Tax;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.Set;
