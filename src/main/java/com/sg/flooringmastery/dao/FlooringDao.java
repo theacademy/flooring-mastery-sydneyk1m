@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.util.Set;
 
 /**
- * An interface for the flooring DAO. This DAO
+ * An interface for the flooring DAO.
  */
 public interface FlooringDao {
 
